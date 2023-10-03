@@ -1,10 +1,6 @@
+import { defineComponent } from 'vue';
 import Button from './Button.vue';
 import IconSearch from '@/assets/icons/Button/Search.vue';
-
-export default {
-  title: 'Button',
-  component: Button,
-};
 
 interface ButtonProps {
   width: number;
@@ -18,10 +14,10 @@ interface ButtonProps {
   background: boolean;
 }
 
-const Template: Story<ButtonProps> = (args: ButtonProps) => ({
+const Template = defineComponent({
   components: { Button, IconSearch },
-  setup() {
-    return { args };
+  props: {
+    args: Object as () => ButtonProps,
   },
   template: `
     <Button
@@ -38,7 +34,8 @@ const Template: Story<ButtonProps> = (args: ButtonProps) => ({
     >
       <span
         class="ui-button__span"
-        :class="{'ui-button__span_search': args.isSearch}">
+        :class="{'ui-button__span_search': args.isSearch}"
+      >
         <IconSearch
           v-if="args.isSearch"
           :class="{'svg_none': args.text.length < 1}"
@@ -49,11 +46,31 @@ const Template: Story<ButtonProps> = (args: ButtonProps) => ({
   `,
 });
 
+export default {
+  title: 'Button',
+  component: Template,
+  argTypes: {
+    args: {
+      control: {
+        type: 'object',
+      },
+    },
+  },
+};
 
-export const Default = Template.bind({});
+export const Default = (args: { [key: string]: any }) => ({
+  components: { Template },
+  setup() {
+    return {
+      args,
+    };
+  },
+  template: '<Template :args="args" />',
+});
+
 Default.args = {
-  width: 100,
-  padding: 0,
+  width: 150,
+  padding: 10,
   isSearch: false,
   searchRight: false,
   text: 'Subscribe',
@@ -63,10 +80,19 @@ Default.args = {
   background: false,
 };
 
-export const CoffeeButton = Template.bind({});
+export const CoffeeButton = (args: { [key: string]: any }) => ({
+  components: { Template },
+  setup() {
+    return {
+      args,
+    };
+  },
+  template: '<Template :args="args" />',
+});
+
 CoffeeButton.args = {
-  width: 100,
-  padding: 0,
+  width: 150,
+  padding: 10,
   isSearch: false,
   searchRight: false,
   text: 'Subscribe',
@@ -76,10 +102,19 @@ CoffeeButton.args = {
   background: false,
 };
 
-export const DisabledButton = Template.bind({});
+export const DisabledButton = (args: { [key: string]: any }) => ({
+  components: { Template },
+  setup() {
+    return {
+      args,
+    };
+  },
+  template: '<Template :args="args" />',
+});
+
 DisabledButton.args = {
-  width: 100,
-  padding: 0,
+  width: 150,
+  padding: 10,
   isSearch: false,
   searchRight: false,
   text: 'Subscribe',
