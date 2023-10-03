@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import AppLayout from "@/layouts/AppLayout.vue";
-import TheButton from '@/components/UI/Buttons/Button.vue'
+import TheButton from '@/components/UI/Buttons/TheButton.vue'
 
 </script>
 
