@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import Button from './Button.vue';
+import Button from './TheButton.vue';
 import IconSearch from '@/assets/icons/Button/Search.vue';
 
 interface ButtonProps {
