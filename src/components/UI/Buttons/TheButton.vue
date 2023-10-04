@@ -78,7 +78,7 @@ function emitsPressed(){
 }
 </script>
 
-<style lang="styl">
+<style lang="stylus" scoped>
 .ui-button
   display block
   cursor pointer
