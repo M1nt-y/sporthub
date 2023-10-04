@@ -10,11 +10,3 @@
 import { useRoute } from 'vue-router'
 const route = useRoute()
 </script>
-
-<style scoped lang="stylus">
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
-}
-</style>
