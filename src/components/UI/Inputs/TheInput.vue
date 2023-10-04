@@ -8,7 +8,7 @@
   <input
     @input="inputs"
     class="ui-input__item"
-    :type="type"
+    :type="TYPE_INPUT"
     :placeholder="placeholder"
     :style="{
       paddingTop: padding + 'px',
@@ -17,14 +17,34 @@
   />
   
   <IconSearch
+      class="ui-input__search"
       v-if="search || searchLeft"
+  />
+
+  <IconShowPassOne
+      @click="showPassword"
+      v-if='password && !SHOW_PASSWORD'
+      class="ui-input__password"
+  />
+
+  <IconShowPassTwo
+      @click="showPassword"
+      v-if='password && SHOW_PASSWORD'
+      class="ui-input__password"
   />
 </div>
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue';
 import IconSearch from '@/assets/icons/Button/Search.vue'
-defineProps({
+import IconShowPassOne from '@/assets/icons/Input/ShowPassOne.vue'
+import IconShowPassTwo from '@/assets/icons/Input/ShowPassTwo.vue'
+
+
+
+
+const props = defineProps({
   padding:{
     type: Number,
     default: 10,
@@ -45,10 +65,29 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  password: {
+    type: Boolean,
+    default: false,
+  }
 })
 const emits = defineEmits(['inputs']);
 function inputs(){
   emits('inputs');
+}
+const TYPE_INPUT = ref(props.type);
+const SHOW_PASSWORD = ref(false);
+
+function toggleInputType() {
+  if (TYPE_INPUT.value === 'text') {
+    TYPE_INPUT.value = 'password';
+  } else {
+    TYPE_INPUT.value = 'text';
+  }
+}
+
+function showPassword() {
+  SHOW_PASSWORD.value = !SHOW_PASSWORD.value;
+  toggleInputType(); 
 }
 </script>
 
@@ -57,7 +96,16 @@ function inputs(){
 .ui-input
   position relative
 
-  svg
+  &__password
+    position absolute
+    cursor pointer
+    right 16px
+    top 50%
+    width 19px
+    height 19px
+    margin-top -9.5px 
+
+  &__search
     position absolute
     pointer-events none
     right 16px
@@ -93,7 +141,7 @@ function inputs(){
     & ^[0]__item
       padding-left 50px
     
-    svg
+    & ^[0]__search
       right unset
       left 20px
 </style>

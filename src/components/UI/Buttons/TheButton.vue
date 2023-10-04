@@ -80,11 +80,7 @@ function emitsPressed() {
 }
 </script>
 
-<<<<<<< HEAD
-<style lang="stylus" scoped>
-=======
 <style lang="stylus">
->>>>>>> a3a93581a8c130661ee6aca82a95a6aa1b4df037
 .ui-button
   display block
   cursor pointer

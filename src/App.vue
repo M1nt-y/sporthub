@@ -1,36 +1,28 @@
 <template>
   <AppLayout>
-<<<<<<< HEAD
+
     <TheInput
-    :padding="16"
-    :placeholder="'You Email'"
-    :type="'text'"
-    :searchLeft="true"
+      :placeholder="'Пароль'"
+      :password="true"
+      :type="'text'"
     />
     <RouterView />
-=======
     <RouterView/>
->>>>>>> a3a93581a8c130661ee6aca82a95a6aa1b4df037
   </AppLayout>
 </template>
 
 <script setup lang="ts">
 import {RouterView} from "vue-router";
 import AppLayout from "@/layouts/AppLayout.vue";
-<<<<<<< HEAD
 import TheInput from '@/components/UI/Inputs/TheInput.vue'
 
 </script>
 
-<style  lang="stylus">
+<style lang="stylus">
+
 *
   box-sizing border-box
 
-
-=======
-</script>
-
-<style lang="stylus">
 html, body, div, span, applet, object,
 h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big,
@@ -49,7 +41,6 @@ code, mark, section, summary, output, cite
   font-size 100%
   font-family Uto, sans-serif
   vertical-align baseline
->>>>>>> a3a93581a8c130661ee6aca82a95a6aa1b4df037
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section
@@ -79,7 +70,7 @@ table
   display flex
   flex-direction column
   min-height 100%
-  background #111
+  // background #111
 
 .wrapper
   display flex
