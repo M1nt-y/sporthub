@@ -1,11 +1,7 @@
 <template>
   <AppLayout>
 
-    <TheInput
-      :placeholder="'Пароль'"
-      :password="true"
-      :type="'text'"
-    />
+    <TheRadioInput/>
     <RouterView />
     <RouterView/>
   </AppLayout>
@@ -14,7 +10,7 @@
 <script setup lang="ts">
 import {RouterView} from "vue-router";
 import AppLayout from "@/layouts/AppLayout.vue";
-import TheInput from '@/components/UI/Inputs/TheInput.vue'
+import TheRadioInput from '@/components/UI/RadioInput/TheRadioInput.vue'
 
 </script>
 
