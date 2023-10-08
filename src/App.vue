@@ -1,8 +1,5 @@
 <template>
   <AppLayout>
-
-    <TheRadioInput/>
-    <RouterView />
     <RouterView/>
   </AppLayout>
 </template>
@@ -10,8 +7,6 @@
 <script setup lang="ts">
 import {RouterView} from "vue-router";
 import AppLayout from "@/layouts/AppLayout.vue";
-import TheRadioInput from '@/components/UI/RadioInput/TheRadioInput.vue'
-
 </script>
 
 <style lang="stylus">
@@ -52,6 +47,9 @@ body
 ol, ul
   list-style none
 
+a
+  text-decoration none
+
 blockquote, q
   quotes none
 
@@ -66,7 +64,7 @@ table
   display flex
   flex-direction column
   min-height 100%
-  // background #111
+  //background #111
 
 .wrapper
   display flex
