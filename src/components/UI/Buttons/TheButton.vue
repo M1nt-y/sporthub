@@ -101,6 +101,9 @@ function emitsPressed() {
     svg
       margin-right 10px
 
+      path
+        transition fill 0.3s ease
+
     &_search
       flex-direction row-reverse
 

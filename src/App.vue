@@ -10,6 +10,10 @@ import AppLayout from "@/layouts/AppLayout.vue";
 </script>
 
 <style lang="stylus">
+
+*
+  box-sizing border-box
+
 html, body, div, span, applet, object,
 h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big,
@@ -43,6 +47,9 @@ body
 ol, ul
   list-style none
 
+a
+  text-decoration none
+
 blockquote, q
   quotes none
 
@@ -57,7 +64,7 @@ table
   display flex
   flex-direction column
   min-height 100%
-  background #111
+  //background #111
 
 .wrapper
   display flex

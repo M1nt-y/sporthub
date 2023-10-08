@@ -10,5 +10,6 @@ declare module "vue-router" {
 
 export enum RouteNamesEnum {
     home = "home",
-    auth = "auth"
+    login = "login",
+    signup = "signup"
 }

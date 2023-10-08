@@ -12,9 +12,17 @@ const router = createRouter({
       component: () => import("@/views/HomeView.vue")
     },
     {
-      path: "/auth",
-      name: RouteNamesEnum.auth,
-      component: () => import("@/views/AuthView.vue"),
+      path: "/login",
+      name: RouteNamesEnum.login,
+      component: () => import("@/views/LoginView.vue"),
+      meta: {
+        layout: AppLayoutsEnum.auth,
+      },
+    },
+    {
+      path: "/signup",
+      name: RouteNamesEnum.signup,
+      component: () => import("@/views/SignupView.vue"),
       meta: {
         layout: AppLayoutsEnum.auth,
       },
