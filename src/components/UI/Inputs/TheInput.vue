@@ -79,8 +79,9 @@ const props = defineProps({
 const dataVaule = ref(props.value)
 const emits = defineEmits(['inputs']);
 
-function inputs(event:any){
-  emits('inputs', event.target.value);
+function inputs(event: Event) {
+  const target = event.target as HTMLInputElement;
+  emits('inputs', target.value);
 }
 
 const TYPE_INPUT = ref(props.type);
