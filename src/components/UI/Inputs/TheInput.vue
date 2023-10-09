@@ -6,7 +6,8 @@
   }"
 >
   <input
-    @input="inputs"
+    @input="inputs($event)"
+    v-model="dataVaule"
     class="ui-input__item"
     :type="TYPE_INPUT"
     :placeholder="placeholder"
@@ -68,12 +69,20 @@ const props = defineProps({
   password: {
     type: Boolean,
     default: false,
-  }
+  },
+  value:{
+    type: [Number, String],
+    required: true,
+  },
 })
+
+const dataVaule = ref(props.value)
 const emits = defineEmits(['inputs']);
-function inputs(){
-  emits('inputs');
+
+function inputs(event:any){
+  emits('inputs', event.target.value);
 }
+
 const TYPE_INPUT = ref(props.type);
 const SHOW_PASSWORD = ref(false);
 

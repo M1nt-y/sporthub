@@ -1,12 +1,25 @@
 <template>
   <AppLayout>
     <RouterView/>
+    <TheInput
+    :value="value"
+    @inputs="onChanged"
+    />
+    {{ value }}
   </AppLayout>
 </template>
 
 <script setup lang="ts">
+import {ref} from 'vue';
 import {RouterView} from "vue-router";
 import AppLayout from "@/layouts/AppLayout.vue";
+import TheInput from "./components/UI/Inputs/TheInput.vue";
+const value = ref('');
+
+function onChanged(event: any){
+  value.value = event;
+}
+
 </script>
 
 <style lang="stylus">
