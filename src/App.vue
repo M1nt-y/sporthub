@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
 import {RouterView} from "vue-router";
 import AppLayout from "@/layouts/AppLayout.vue";
 </script>
@@ -65,7 +64,7 @@ table
   display flex
   flex-direction column
   min-height 100%
-  //background #111
+  background #111
 
 .wrapper
   display flex
