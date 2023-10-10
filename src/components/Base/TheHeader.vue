@@ -17,9 +17,9 @@
         <NotificationIcon/>
       </div>
 
-      <RouterLink to="/login">
+      <!-- <RouterLink to="/login">
         <TheButton text="Sign In" :padding="12" :width="120" />
-      </RouterLink>
+      </RouterLink> -->
     </div>
   </header>
 </template>

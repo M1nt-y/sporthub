@@ -65,7 +65,7 @@ table
   display flex
   flex-direction column
   min-height 100%
-  //background #111
+  background #111
 
 .wrapper
   display flex
