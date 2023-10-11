@@ -40,7 +40,7 @@ class Store implements StoreType {
 
 type CommentType = {
     id: string,
-    author: ShortUserType | {},
+    author: ShortUserType,
     content: string,
     replies: CommentType[] | [],
     likes: string[] | [],
