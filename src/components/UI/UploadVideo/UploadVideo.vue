@@ -1,50 +1,50 @@
 <template>
- <div class="upload-video"
-    @dragover.prevent 
-    @drop="handleDrop($event)"
-    @dragenter="dragEnter"
-    @dragleave="dragLeave"
-    :class="{ 'upload-video_using': isDragging }"
- >
-  <div class="upload-video__img">
-    <IconUpload/>
-  </div>
-  <div class="upload-video__text">
-    <h4>Drag and drop videos to upload</h4>
-  </div>
-  <div class="upload-video__btn">
-    <input
-        type="file"
-        ref="fileInput"
-        style="display: none"
-        @change="handleFileInputChange($event)"
-        accept="video/*" 
-      />
-    <TheButton
-      :width="180"
-      :text="'Or choose files'"
-      :padding="10"
-      :background="isDragging"
-      @click="openFileInput"
-    />
-  </div>
+  <div class="upload-video"
+       @dragover.prevent
+       @drop="handleDrop($event)"
+       @dragenter="dragEnter"
+       @dragleave="dragLeave"
+       :class="{ 'upload-video_using': isDragging }"
+  >
+    <div class="upload-video__img">
+      <IconUpload/>
+    </div>
 
- 
- </div>
+    <div class="upload-video__text">
+      <h4>Drag and drop videos to upload</h4>
+    </div>
+
+    <div class="upload-video__btn">
+      <input
+          type="file"
+          ref="fileInput"
+          style="display: none"
+          @change="handleFileInputChange($event)"
+          accept="video/*"
+      />
+
+      <TheButton
+          :width="180"
+          :text="'Or choose files'"
+          :padding="10"
+          :disabledBtn="isDragging"
+          @click="openFileInput"
+      />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import {ref} from 'vue'
 import {stateVideo} from '@/stores/video-create'
 import IconUpload from '@/assets/icons/VideoCreate/IconUpload.vue'
-
 import TheButton from '@/components/UI/Buttons/TheButton.vue';
+
 
 const videoState = stateVideo();
 
-
 const isDragging = ref(false)
-const fileInput = ref<HTMLInputElement | null>(null) 
+const fileInput = ref<HTMLInputElement | null>(null)
 
 function handleDrop(event: DragEvent) {
   event.preventDefault();
@@ -66,6 +66,7 @@ function handleDrop(event: DragEvent) {
     isDragging.value = false;
   }
 }
+
 function dragEnter() {
   isDragging.value = true;
 }
@@ -79,7 +80,7 @@ function handleFileInputChange(event: Event) {
   const files = target.files;
 
   if (files) {
-    videoState.video = files[0]; 
+    videoState.video = files[0];
     videoState.stateVideo = true;
   }
 }
@@ -94,7 +95,6 @@ videoState.video = null;
 videoState.stateVideo = null;
 </script>
 
-
 <style lang="stylus">
 .upload-video
   margin-top 24px
@@ -108,7 +108,7 @@ videoState.stateVideo = null;
   cursor pointer
   transition all .25s
 
-  @media(max-width: 576px)
+  @media (max-width: 576px)
     background none
     padding 0
     justify-content center
@@ -116,21 +116,22 @@ videoState.stateVideo = null;
   &_using
     background #AD7955
 
-    @media(max-width: 576px)
+    @media (max-width: 576px)
       background none
 
     & ^[0]__img
       svg
         transition all .25s
+
         path
           fill white
 
   &__img
     margin-top 57px
     pointer-events none
-    use-select none
+    user-select none
 
-    @media(max-width: 576px)
+    @media (max-width: 576px)
       margin-top 0
 
     svg
@@ -140,9 +141,9 @@ videoState.stateVideo = null;
     max-width 367px
     margin-top 44px
     pointer-events none
-    use-select none
+    user-select none
 
-    @media(max-width: 576px)
+    @media (max-width: 576px)
       margin-top 0
 
     h4
@@ -156,7 +157,4 @@ videoState.stateVideo = null;
     margin-top 45px
     margin-bottom 60px
 
-    
 </style>
-
-

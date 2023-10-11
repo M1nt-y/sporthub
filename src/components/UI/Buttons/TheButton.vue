@@ -170,7 +170,7 @@ function emitsPressed() {
   &_disabled
     border 1px solid #777
     pointer-events none
-    use-select none
+    user-select none
     opacity 0.6
     background #777
 
