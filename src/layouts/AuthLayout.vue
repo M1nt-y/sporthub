@@ -34,6 +34,7 @@ import LogoIcon from '@/assets/icons/Header/LogoIcon.vue'
   &-wrapper
     display flex
     min-width 580px
+    max-width 580px
     padding 24px 48px
     align-items center
     flex-direction column
