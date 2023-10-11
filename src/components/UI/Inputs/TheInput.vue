@@ -7,6 +7,7 @@
       }"
   >
     <input
+        @blur="$emit('blur')"
         @input="emitInput($event)"
         :value="modelValue"
         class="ui-input__item"
@@ -25,20 +26,20 @@
 
     <IconShowPassOne
         @click="showPassword"
-        v-if='password && !SHOW_PASSWORD'
+        v-if='password && SHOW_PASSWORD'
         class="ui-input__password"
     />
 
     <IconShowPassTwo
         @click="showPassword"
-        v-if='password && SHOW_PASSWORD'
+        v-if='password && !SHOW_PASSWORD'
         class="ui-input__password"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import IconSearch from '@/assets/icons/Button/Search.vue'
 import IconShowPassOne from '@/assets/icons/Input/ShowPassOne.vue'
 import IconShowPassTwo from '@/assets/icons/Input/ShowPassTwo.vue'
@@ -75,7 +76,7 @@ const props = defineProps({
   }
 })
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'blur'])
 
 function emitInput(event: Event) {
   const target = event.target as HTMLInputElement
@@ -97,8 +98,13 @@ function showPassword() {
   SHOW_PASSWORD.value = !SHOW_PASSWORD.value;
   toggleInputType();
 }
-</script>
 
+onMounted(() => {
+  if (props.password) {
+    toggleInputType();
+  }
+})
+</script>
 
 <style lang="stylus">
 .ui-input
@@ -131,7 +137,7 @@ function showPassword() {
     overflow hidden
     border 0
     outline 0
-    font-family Uto
+    font-family sans-serif
     font-size 16px
     font-weight 400
 
