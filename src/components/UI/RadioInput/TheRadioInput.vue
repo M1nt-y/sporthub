@@ -1,14 +1,15 @@
 <template>
-<div 
-  class="ui-radio"
-  >
-  <IconRadioChecked 
-  style="width: 28px; height: 28px;"
-  v-if="state"/>
-  <IconRadioDefault 
-  style="width: 28px; height: 28px;"
-  v-else/>
-</div>
+  <div class="ui-radio">
+    <IconRadioChecked
+        style="width: 28px; height: 28px;"
+        v-if="state"
+    />
+
+    <IconRadioDefault
+        style="width: 28px; height: 28px;"
+        v-else
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -21,11 +22,11 @@ defineProps({
     default: false,
   }
 })
-
-
 </script>
 
 <style lang="stylus">
 .ui-radio
+  display flex
   cursor pointer
+  align-items center
 </style>

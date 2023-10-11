@@ -1,79 +1,88 @@
 <template>
-<div class="ui-input"
-:class="{
-  'ui-input_search': search, // отображение иконки поиска справа
-  'ui-input_search-left': searchLeft // отображение иконки поиска слева
-  }"
->
-  <input
-    @input="inputs"
-    class="ui-input__item"
-    :type="TYPE_INPUT"
-    :placeholder="placeholder"
-    :style="{
-      paddingTop: padding + 'px',
-      paddingBottom: padding + 'px',
+  <div
+      class="ui-input"
+      :class="{
+        'ui-input_search': search, // отображение иконки поиска справа
+        'ui-input_search-left': searchLeft // отображение иконки поиска слева
       }"
-  />
-  
-  <IconSearch
-      class="ui-input__search"
-      v-if="search || searchLeft"
-  />
+  >
+    <input
+        @blur="$emit('blur')"
+        @input="emitInput($event)"
+        :value="modelValue"
+        class="ui-input__item"
+        :type="TYPE_INPUT"
+        :placeholder="placeholder"
+        :style="{
+          paddingTop: padding + 'px',
+          paddingBottom: padding + 'px',
+        }"
+    />
 
-  <IconShowPassOne
-      @click="showPassword"
-      v-if='password && !SHOW_PASSWORD'
-      class="ui-input__password"
-  />
+    <IconSearch
+        class="ui-input__search"
+        v-if="search || searchLeft"
+    />
 
-  <IconShowPassTwo
-      @click="showPassword"
-      v-if='password && SHOW_PASSWORD'
-      class="ui-input__password"
-  />
-</div>
+    <IconShowPassOne
+        @click="showPassword"
+        v-if='password && SHOW_PASSWORD'
+        class="ui-input__password"
+    />
+
+    <IconShowPassTwo
+        @click="showPassword"
+        v-if='password && !SHOW_PASSWORD'
+        class="ui-input__password"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import IconSearch from '@/assets/icons/Button/Search.vue'
 import IconShowPassOne from '@/assets/icons/Input/ShowPassOne.vue'
 import IconShowPassTwo from '@/assets/icons/Input/ShowPassTwo.vue'
 
 
-
-
 const props = defineProps({
-  padding:{
+  padding: {
     type: Number,
     default: 10,
   },
-  placeholder:{
+  placeholder: {
     type: String,
     default: '',
   },
-  type:{
+  type: {
     type: String,
     default: 'text',
   },
-  search:{
+  search: {
     type: Boolean,
     default: false,
   },
-  searchLeft:{
+  searchLeft: {
     type: Boolean,
     default: false,
   },
   password: {
     type: Boolean,
     default: false,
+  },
+  modelValue: {
+    type: [Number, String],
+    default: undefined
   }
 })
-const emits = defineEmits(['inputs']);
-function inputs(){
-  emits('inputs');
+
+const emits = defineEmits(['update:modelValue', 'blur'])
+
+function emitInput(event: Event) {
+  const target = event.target as HTMLInputElement
+  emits('update:modelValue', target.value)
 }
+
 const TYPE_INPUT = ref(props.type);
 const SHOW_PASSWORD = ref(false);
 
@@ -87,10 +96,15 @@ function toggleInputType() {
 
 function showPassword() {
   SHOW_PASSWORD.value = !SHOW_PASSWORD.value;
-  toggleInputType(); 
+  toggleInputType();
 }
-</script>
 
+onMounted(() => {
+  if (props.password) {
+    toggleInputType();
+  }
+})
+</script>
 
 <style lang="stylus">
 .ui-input
@@ -103,7 +117,7 @@ function showPassword() {
     top 50%
     width 19px
     height 19px
-    margin-top -9.5px 
+    margin-top -9.5px
 
   &__search
     position absolute
@@ -112,18 +126,18 @@ function showPassword() {
     top 50%
     width 19px
     height 19px
-    margin-top -9.5px 
+    margin-top -9.5px
 
   &__item
     width 100%
     border-radius 8px
-    background  #222
+    background #222
     color #FFF
     padding 0 16px
     overflow hidden
     border 0
     outline 0
-    font-family Uto
+    font-family sans-serif
     font-size 16px
     font-weight 400
 
@@ -132,7 +146,7 @@ function showPassword() {
 
     &:focus
       outline 2px solid #FFF
-    
+
   &_search
     & ^[0]__item
       padding-right 40px
@@ -140,7 +154,7 @@ function showPassword() {
   &_search-left
     & ^[0]__item
       padding-left 50px
-    
+
     & ^[0]__search
       right unset
       left 20px
