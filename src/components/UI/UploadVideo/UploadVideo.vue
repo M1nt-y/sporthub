@@ -24,18 +24,24 @@
       :width="180"
       :text="'Or choose files'"
       :padding="10"
-      :disabledBtn="isDragging"
+      :background="isDragging"
       @click="openFileInput"
     />
   </div>
+
+ 
  </div>
 </template>
 
 <script setup lang="ts">
 import {ref} from 'vue'
+import {stateVideo} from '@/stores/video-create'
 import IconUpload from '@/assets/icons/VideoCreate/IconUpload.vue'
 
 import TheButton from '@/components/UI/Buttons/TheButton.vue';
+
+const videoState = stateVideo();
+
 
 const isDragging = ref(false)
 const fileInput = ref<HTMLInputElement | null>(null) 
@@ -44,20 +50,22 @@ function handleDrop(event: DragEvent) {
   event.preventDefault();
   const files = event.dataTransfer?.files;
 
-  if (files && files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      if (file.type.startsWith('video/')) {
-        isDragging.value = false;
-        console.log(`Добавлен видеофайл: ${file.name}`);
-      } else {
-        console.log(`Неверный тип файла: ${file.type}`);
-        isDragging.value = false;
-      }
+  if (files && files.length === 1) {
+    const file = files[0];
+    if (file.type.startsWith('video/')) {
+      isDragging.value = false;
+      videoState.video = file;
+      videoState.stateVideo = true;
+      console.log(`Добавлен видеофайл: ${file.name}`);
+    } else {
+      console.log(`Неверный тип файла: ${file.type}`);
+      isDragging.value = false;
     }
+  } else {
+    console.log("Пожалуйста, перетащите только один видеофайл.");
+    isDragging.value = false;
   }
 }
-
 function dragEnter() {
   isDragging.value = true;
 }
@@ -70,10 +78,9 @@ function handleFileInputChange(event: Event) {
   const target = event.target as HTMLInputElement;
   const files = target.files;
 
-  if (files && files.length > 0) {
-    for (let i = 0; i < files.length; i++) {
-      console.log(`Выбран файл: ${files[i].name}`);
-    }
+  if (files) {
+    videoState.video = files[0]; 
+    videoState.stateVideo = true;
   }
 }
 
@@ -83,6 +90,8 @@ function openFileInput() {
   }
 }
 
+videoState.video = null;
+videoState.stateVideo = null;
 </script>
 
 
