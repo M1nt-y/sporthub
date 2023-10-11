@@ -24,7 +24,7 @@
       :width="180"
       :text="'Or choose files'"
       :padding="10"
-      :disabledBtn="isDragging"
+      :background="isDragging"
       @click="openFileInput"
     />
   </div>

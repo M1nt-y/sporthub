@@ -5,17 +5,18 @@
   'ui-input_search-left': searchLeft // отображение иконки поиска слева
   }"
 >
-  <input
-    @input="inputs($event)"
-    v-model="dataVaule"
-    class="ui-input__item"
-    :type="TYPE_INPUT"
-    :placeholder="placeholder"
-    :style="{
-      paddingTop: padding + 'px',
-      paddingBottom: padding + 'px',
-      }"
-  />
+    <input
+        @blur="$emit('blur')"
+        @input="emitInput($event)"
+        :value="modelValue"
+        class="ui-input__item"
+        :type="TYPE_INPUT"
+        :placeholder="placeholder"
+        :style="{
+          paddingTop: padding + 'px',
+          paddingBottom: padding + 'px',
+        }"
+    />
   
   <IconSearch
       class="ui-input__search"
@@ -70,20 +71,19 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  value:{
+  modelValue: {
     type: [Number, String],
-    required: true,
-  },
+    default: undefined
+  }
 })
 
-const dataVaule = ref(props.value)
-const emits = defineEmits(['inputs']);
 
-function inputs(event: Event) {
-  const target = event.target as HTMLInputElement;
-  emits('inputs', target.value);
+const emits = defineEmits(['update:modelValue', 'blur'])
+
+function emitInput(event: Event) {
+  const target = event.target as HTMLInputElement
+  emits('update:modelValue', target.value)
 }
-
 const TYPE_INPUT = ref(props.type);
 const SHOW_PASSWORD = ref(false);
 

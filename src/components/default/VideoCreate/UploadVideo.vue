@@ -1,9 +1,11 @@
 <template>
-  <VideoHeader
-    class="head-video"
-    :disabled="true"
-  />
-  <UploadVideo/>
+  <div class="video-create">
+    <VideoHeader
+      class="head-video"
+      :disabled="true"
+    />
+    <UploadVideo/>
+  </div>
 </template>
 
 
@@ -16,4 +18,12 @@ import UploadVideo from '@/components/UI/UploadVideo/UploadVideo.vue'
 .head-video
   @media(max-width: 576px)
     display none
+
+.video-create
+  @media(max-width: 576px)
+    display flex
+    margin-top auto
+    justify-content center
+    align-items center
+    min-height 100vh
 </style>
