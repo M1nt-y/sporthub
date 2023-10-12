@@ -1,9 +1,8 @@
 <template>
   <div class="video-info">
     <div class="video-block">
-      <video controls width="920" height="518">
-        <source v-if="videoState.video && !URL_VIDEO" :src="URL.createObjectURL(videoState.video)" type="video/mp4">
-        <source v-else :src="URL_VIDEO" type="video/mp4">
+      <video :controls="progress == 100" width="920" height="518">
+        <source :src="videoLink" type="video/mp4">
       </video>
 
       <div class="video-block__content" v-if="progress !== 100">
@@ -82,7 +81,7 @@
 
 
 <script setup lang="ts">
-import {onBeforeMount, ref} from 'vue';
+import {onBeforeMount, ref, computed} from 'vue';
 import {getDownloadURL, getStorage, ref as storageRef, uploadBytesResumable} from 'firebase/storage'
 import IconUpload from '@/assets/icons/VideoCreate/IconUpload.vue'
 import {stateVideo} from '@/stores/video-create';
@@ -188,6 +187,14 @@ onBeforeMount(() => {
     console.error('Файл видео не выбран.');
   }
 });
+
+const videoLink = computed(()=>{
+  if(videoState.video && !URL_VIDEO.value){
+    return URL.createObjectURL(videoState.video)
+  }else{
+    return URL_VIDEO.value
+  }
+})
 
 </script>
 
