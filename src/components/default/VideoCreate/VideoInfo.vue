@@ -1,12 +1,23 @@
 <template>
 <div class="video-info">
   <div class="video-block">
-    <video  width="920" height="518">
+    <video v-if="progress !== 100"  width="920" height="518">
       <source v-if="videoState.video" :src="URL.createObjectURL(videoState.video)" type="video/mp4">
     </video>
 
-    <div class="video-block__content">
+    <video
+      v-else
+      controls
+      width="920"
+      height="518"
+      preload="none"
+    >
+      <source :src="URL_VIDEO" type="video/mp4">
+    </video>
+
+    <div class="video-block__content" v-if="progress !== 100">
       <h3>Processing will begin shortly</h3>
+      <h5>{{ Math.round(progress)}} %</h5>
       <p v-if="videoState.video !== null">{{ videoState.video.name }}</p>
     </div>
   </div>
@@ -71,7 +82,8 @@
 
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
+import {getStorage, ref as storageRef, uploadBytes, getDownloadURL, uploadBytesResumable} from 'firebase/storage'
 import IconUpload from '@/assets/icons/VideoCreate/IconUpload.vue'
 import { stateVideo } from '@/stores/video-create';
 import TheInput from '@/components/UI/Inputs/TheInput.vue';
@@ -79,6 +91,8 @@ import TheInput from '@/components/UI/Inputs/TheInput.vue';
 const { URL } = window;
 const videoState = stateVideo();
 
+const progress = ref(0);
+const URL_VIDEO = ref('')
 const img = ref(null as File | null)
 
 const isDragging = ref(false)
@@ -88,6 +102,7 @@ const data = ref({
   description: '',
   link: '',
 })
+
 
 const fileInput = ref<HTMLInputElement | null>(null) 
   const openFileInput = () => {
@@ -132,6 +147,51 @@ function dragEnter() {
 function dragLeave() {
   isDragging.value = false;
 }
+
+async function uploadVideoToStorage(videoFile: File) {
+  const storage = getStorage();
+  const storageReference = storageRef(storage, 'video/' + videoFile.name + Date.now());
+  try {
+    const uploadTask = uploadBytesResumable(storageReference, videoFile);
+    return new Promise((resolve, reject) => {
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          progress.value = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Прогресс загрузки: ${progress.value}%`);
+        },
+        (error) => {
+          console.error('Ошибка при загрузке видео:', error);
+          reject(error);
+        },
+        async () => {
+          try {
+            URL_VIDEO.value = await getDownloadURL(storageReference);
+            console.log('Видео успешно загружено. URL:', URL_VIDEO.value);
+            resolve(URL_VIDEO.value);
+          } catch (error) {
+            console.error('Ошибка при получении URL:', error);
+            reject(error);
+          }
+        }
+      );
+    });
+
+  } catch (error) {
+    console.error('Ошибка при создании ссылки на хранилище:', error);
+    return null;
+  }
+}
+
+onBeforeMount(() => {
+  const video = videoState.video;
+  if (video !== null) {
+    uploadVideoToStorage(video);
+  } else {
+    console.error('Файл видео не выбран.');
+  }
+});
+
+
 
 </script>
 
@@ -284,6 +344,15 @@ function dragLeave() {
 
       @media(max-width: 575px)
         font-size 16px
+    
+    h5
+      margin-top 20px
+      color #FFF
+      font-size 20px
+      font-family Times
+
+      @media(max-width: 575px)
+        font-size 15px
 
     p
       margin-top 40px
