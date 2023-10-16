@@ -1,14 +1,14 @@
 <template>
   <div class="video-info">
     <div class="video-block">
-      <video :controls="progress == 100" width="920" height="518">
-        <source :src="videoLink" type="video/mp4">
+      <video :controls="progresVideo == 100" width="920" height="518">
+        <source :src="video" type="video/mp4">
       </video>
 
-      <div class="video-block__content" v-if="progress !== 100">
+      <div class="video-block__content" v-if="progresVideo !== 100">
         <h3>Processing will begin shortly</h3>
-        <h5>{{ Math.round(progress) }} %</h5>
-        <p v-if="videoState.video !== null">{{ videoState.video.name }}</p>
+        <h5>{{ Math.round(progresVideo) }} %</h5>
+        <p>{{ videoName }}</p>
       </div>
     </div>
 
@@ -81,33 +81,34 @@
 
 
 <script setup lang="ts">
-import {onBeforeMount, ref, computed} from 'vue';
-import {getDownloadURL, getStorage, ref as storageRef, uploadBytesResumable} from 'firebase/storage'
+import {ref} from 'vue';
+
 import IconUpload from '@/assets/icons/VideoCreate/IconUpload.vue'
-import {stateVideo} from '@/stores/video-create';
+
 import TheInput from '@/components/UI/Inputs/TheInput.vue';
 
-const {URL} = window;
+import {stateVideo} from '@/stores/video-create';
 const videoState = stateVideo();
 
-const progress = ref(0);
-const URL_VIDEO = ref('')
+
+const {URL} = window;
+
+
 const img = ref(null as File | null)
 
+const URL_IMAGE = ref('')
+
 const isDragging = ref(false)
-const data = ref({
-  title: '',
-  category: '',
-  description: '',
-  link: '',
-})
 
+const imgUpdate = ref(null as Boolean | null);
 
-const fileInput = ref<HTMLInputElement | null>(null)
+const fileInput = ref<HTMLInputElement | null>(null);
+
 const openFileInput = () => {
   const filesInput = fileInput.value;
   if (filesInput) {
     filesInput.click();
+    imgUpdate.value = true;
   }
 };
 
@@ -115,10 +116,11 @@ const handleFileChange = (event: any) => {
   const files = event.target.files;
   if (files && files.length === 1) {
     img.value = files[0];
+    videoState.perview = files[0];
   }
 };
 
-function handleDrop(event: DragEvent) {
+async function handleDrop(event: DragEvent) {
   event.preventDefault();
   const files = event.dataTransfer?.files;
 
@@ -127,7 +129,8 @@ function handleDrop(event: DragEvent) {
     if (file.type.startsWith('image/')) {
       isDragging.value = false;
       img.value = file;
-      console.log(`Добавлено фото:: ${file.name}`);
+      videoState.perview = file;
+      console.log(`Добавлено фото:: ${URL_IMAGE.value}`);
     } else {
       console.log(`Неверный тип файла: ${file.type}`);
       isDragging.value = false;
@@ -146,56 +149,32 @@ function dragLeave() {
   isDragging.value = false;
 }
 
-async function uploadVideoToStorage(videoFile: File) {
-  const storage = getStorage();
-  const storageReference = storageRef(storage, 'video/video-' + Date.now());
-  try {
-    const uploadTask = uploadBytesResumable(storageReference, videoFile);
-    return new Promise((resolve, reject) => {
-      uploadTask.on('state_changed',
-          (snapshot) => {
-            progress.value = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log(`Прогресс загрузки: ${progress.value}%`);
-          },
-          (error) => {
-            console.error('Ошибка при загрузке видео:', error);
-            reject(error);
-          },
-          async () => {
-            try {
-              URL_VIDEO.value = await getDownloadURL(storageReference);
-              console.log('Видео успешно загружено. URL:', URL_VIDEO.value);
-              resolve(URL_VIDEO.value);
-            } catch (error) {
-              console.error('Ошибка при получении URL:', error);
-              reject(error);
-            }
-          }
-      );
-    });
-  } catch (error) {
-    console.error('Ошибка при создании ссылки на хранилище:', error);
-    return null;
-  }
-}
 
-onBeforeMount(() => {
-  const video = videoState.video;
-  if (video !== null) {
-    uploadVideoToStorage(video);
-  } else {
-    console.error('Файл видео не выбран.');
-  }
-});
-
-const videoLink = computed(()=>{
-  if(videoState.video && !URL_VIDEO.value){
-    return URL.createObjectURL(videoState.video)
-  }else{
-    return URL_VIDEO.value
+defineProps({
+  data: {
+    type: Object,
+    default: {
+      title: '',
+      category: '',
+      description: '',
+      link: '',
+    }
+  },
+  video: {
+    type: String,
+    default: '',
+  },
+  videoName: {
+    type: String,
+    default: '',
+  },
+  progresVideo: {
+    type: Number,
+    default: 0,
   }
 })
 
+videoState.perview = null;
 </script>
 
 <style lang="stylus">
