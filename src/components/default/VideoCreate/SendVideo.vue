@@ -17,7 +17,7 @@
 import {ref, computed} from 'vue';
 import {Video, ShortVideo} from '@/types/types'
 import { db } from "@/firebase/index";
-import {updateDoc, getDoc,  arrayUnion ,  doc,} from "firebase/firestore";
+import {updateDoc, getDoc,  arrayUnion ,  doc, setDoc, deleteDoc, collection } from "firebase/firestore";
 import {getDownloadURL, getStorage, ref as storageRef, uploadBytesResumable, deleteObject } from 'firebase/storage'
 import VideoHeader from '@/components/default/VideoCreate/VideoHeader.vue'
 import VideoInfo from '@/components/default/VideoCreate/VideoInfo.vue'
@@ -28,6 +28,7 @@ const router = useRouter();
 const date = ref(Date.now())
 
 const STATE = ref(false)
+const VIDEO_DURATION = ref('')
 
 function saveInfo(){
   console.log('Сохранять данные')
@@ -46,7 +47,7 @@ async function deleteVideo() {
         const userData = userDoc.data();
         if (userData.videos) {
           const storage = getStorage();
-          const videoIndex = userData.videos.findIndex((video: { id: number; }) => video.id == date.value);
+          const videoIndex = userData.videos.findIndex((video: { videoId: number; }) => video.videoId == date.value);
           
           if (videoIndex !== -1) {
             userData.videos.splice(videoIndex, 1);
@@ -61,6 +62,11 @@ async function deleteVideo() {
             await deleteObject(imageStorageReference);
 
             await updateDoc(userDocRef, updatedInfo);
+            const videoCollection = collection(db, 'videos');
+            const videoDocRef = doc(videoCollection, `video-${date.value}`);
+            await deleteDoc(videoDocRef);
+            console.log(`Документ video-${date.value} успешно удален.`);
+
             console.log('Видео успешно удалено.');
             STATE.value = false;
             router.push('/');
@@ -158,7 +164,44 @@ async function uploadVideoAndImage(videoFile: File, imageFile: File) {
   }
 }
 
-async function updateInfo(){
+async function getVideoDuration(videoFile: any): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const videoElement = document.createElement('video');
+    videoElement.src = URL.createObjectURL(videoFile);
+    videoElement.addEventListener('loadedmetadata', () => {
+      const durationInSeconds = videoElement.duration;
+      const totalSeconds = Math.floor(durationInSeconds);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const formattedDuration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      resolve(formattedDuration);
+    });
+  });
+}
+
+
+
+
+async function updateInfo() {
+  const videoFile = videoState.video;
+  const duration = await getVideoDuration(videoFile);
+
+  const authData = localStorage.getItem('auth');
+  const user = authData ? JSON.parse(authData) : null;
+  const videoData = new ShortVideo();
+  videoData.videoId = `${date.value}`;
+  videoData.title = data.value.title;
+  videoData.duration = duration;
+  videoData.photo = URL_IMAGE.value;
+
+  const info = {
+    videos: arrayUnion(JSON.parse(JSON.stringify(videoData)))
+  };
+
+  await updateDoc(doc(db, "publicUsers", user.user.id), info);
+}
+
+async function createVideo(){
   const authData = localStorage.getItem('auth');
   const user = authData ? JSON.parse(authData) : null;
   const videoData = new Video();
@@ -181,22 +224,15 @@ async function updateInfo(){
     id: 'preview-' + date.value,
     link: URL_IMAGE.value,
   };
-
-  const info = {
-    videos: arrayUnion(JSON.parse(JSON.stringify((videoData))))
-  }
-
-  await updateDoc(doc(db, "publicUsers",  user.user.id), info);
-  
+  await setDoc(doc(db, "videos",  `video-${date.value}`), JSON.parse(JSON.stringify(videoData)));
 }
-
-
 
 async function sendVideo(){
   if(videoState.video !== null && videoState.perview !== null){
     await uploadVideoAndImage(videoState.video, videoState.perview)
   }
   await updateInfo()
+  await createVideo();
   STATE.value = true;
 }
 
