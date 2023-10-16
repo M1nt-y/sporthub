@@ -24,7 +24,7 @@
           :class="{'dropdown_active': isOpened}"
           >
           <p class="item"   @click.stop="savedData">Save as draft</p>
-          <p class="item">Delete</p>
+          <p class="item" @click.stop="deleteData">Delete</p>
         </div>
       </div>
     </div>
@@ -50,10 +50,15 @@ watchEffect(() => {
   }
 });
 
-const emits = defineEmits(['saveInfo', 'send'])
+const emits = defineEmits(['saveInfo', 'send', 'delete'])
 
 function savedData(){
   emits('saveInfo');
+  isOpened.value = false
+}
+
+function deleteData(){
+  emits('delete');
   isOpened.value = false
 }
 
