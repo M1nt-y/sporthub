@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import {ref, computed} from 'vue';
 import { db } from "@/firebase/index";
-import {updateDoc,  getFirestore,  doc, getDocs, getDoc, collection, writeBatch, setDoc, deleteDoc    } from "firebase/firestore";
+import {updateDoc,  arrayUnion ,  doc, getDoc} from "firebase/firestore";
 import {getDownloadURL, getStorage, ref as storageRef, uploadBytesResumable} from 'firebase/storage'
 import VideoHeader from '@/components/default/VideoCreate/VideoHeader.vue'
 import VideoInfo from '@/components/default/VideoCreate/VideoInfo.vue'
@@ -114,7 +114,7 @@ async function uploadVideoAndImage(videoFile: File, imageFile: File) {
 
 async function sendVideo(){
   if(videoState.video !== null && videoState.perview !== null){
-    uploadVideoAndImage(videoState.video, videoState.perview)
+    await uploadVideoAndImage(videoState.video, videoState.perview)
   }
   await updateInfo()
 }
@@ -122,12 +122,10 @@ async function sendVideo(){
 async function updateInfo(){
   const authData = localStorage.getItem('auth');
   const user = authData ? JSON.parse(authData) : null;
-  const userDocRef = doc(db, 'publicUsers', user.user.id);
-  const userDoc = await getDoc(userDocRef);
   const DataFirebase = {
     id: date.value,
     title: data.value.title,
-    uploaded: new Date().toLocaleString,
+    uploaded: new Date(),
     author: {
       id:  user.user.id,
       photo: user.user.photo,
@@ -139,7 +137,13 @@ async function updateInfo(){
     video: URL_VIDEO.value,
     preview: URL_IMAGE.value,
   }
-  console.log(userDoc.data())
+
+  const info = {
+    videos: arrayUnion(DataFirebase)
+  }
+
+  await updateDoc(doc(db, "publicUsers",  user.user.id), info);
+  
 }
 
 </script>
