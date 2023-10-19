@@ -37,13 +37,13 @@
         </div>
 
         <div class="header__profile-dropdown" v-if="displayLinks" @click.stop>
-          <div class="header__profile-link">
+          <RouterLink to="/profile" class="header__profile-link">
             <div class="header__profile-icon">
               <EditIcon/>
             </div>
 
             Edit profile
-          </div>
+          </RouterLink>
 
           <div class="header__profile-link" v-if="user && !user.isBusiness">
             <div class="header__profile-icon">

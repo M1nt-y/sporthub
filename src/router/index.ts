@@ -28,6 +28,11 @@ const router = createRouter({
       },
     },
     {
+      path: "/profile",
+      name: RouteNamesEnum.profileEdit,
+      component: () => import("@/views/ProfileEditView.vue")
+    },
+    {
       path: "/video-create",
       name: RouteNamesEnum.videoCreate,
       component: () => import("@/views/VideocreateView.vue")
