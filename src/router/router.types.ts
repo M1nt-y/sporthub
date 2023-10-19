@@ -12,6 +12,7 @@ export enum RouteNamesEnum {
     home = "home",
     login = "login",
     signup = "signup",
+    profileEdit = "profile-edit",
     videoCreate = "video-create",
     creatorVideo = "creator-video",
 }
