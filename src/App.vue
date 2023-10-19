@@ -36,6 +36,7 @@ ol, ul
 
 a
   text-decoration none
+  color inherit
 
 blockquote, q
   quotes none

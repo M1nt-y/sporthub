@@ -56,7 +56,7 @@ async function deleteVideo() {
               videos: userData.videos,
             };
             const videoStorageReference = storageRef(storage, 'video/' + `video-${date.value}`);
-            const imageStorageReference = storageRef(storage, 'perview/' + `perview-${date.value}`);
+            const imageStorageReference = storageRef(storage, 'preview/' + `preview-${date.value}`);
 
             await deleteObject(videoStorageReference);
             await deleteObject(imageStorageReference);
@@ -108,7 +108,7 @@ const URL_IMAGE = ref('')
 async function uploadVideoAndImage(videoFile: File, imageFile: File) {
   const storage = getStorage();
   const videoStorageReference = storageRef(storage, 'video/' + `video-${date.value}`);
-  const imageStorageReference = storageRef(storage, 'perview/' + `perview-${date.value}`);
+  const imageStorageReference = storageRef(storage, 'preview/' + `preview-${date.value}`);
   
   try {
     const uploadVideoTask = uploadBytesResumable(videoStorageReference, videoFile);
