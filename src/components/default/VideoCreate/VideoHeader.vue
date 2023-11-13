@@ -1,9 +1,19 @@
 <template>
   <div class="video-header">
-    <h3>Adding a new video</h3>
+    <h3 v-if="$route.name === 'video-create'">Adding a new video</h3>
+    <h3 v-else>Edit video</h3>
     <div class="video-header__btn">
       <TheButton
+        v-if="$route.name === 'video-create'"
         :text="'Publish'"
+        :disabledBtn="disabled"
+        :padding="14"
+        :width="180"
+        @click="sendVideo"
+      />
+      <TheButton
+        v-else
+        :text="'Edit'"
         :disabledBtn="disabled"
         :padding="14"
         :width="180"

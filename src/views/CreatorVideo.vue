@@ -8,14 +8,17 @@
         </div>
         <div class="creator-video__header-btn">
           <p  v-if="SELECTED_ROUTER === ''">
-            <IconAdd/>
             <router-link :to="{ path: `/video-create` }">
+              <IconAdd/>
               Add new video
             </router-link>
           </p>
           <p  v-else>
-            <IconAdd/>
-            Create new playlist</p>
+            <router-link :to="{ path: `/video-create` }">
+              <IconAdd/>
+              Create new playlist
+            </router-link>
+          </p>
         </div>
       </div>
 
@@ -143,7 +146,7 @@ onBeforeMount(() =>{
           color white
     
     &-btn
-      p
+      a
         border-radius 8px
         background #AD7955
         padding 11px 17px

@@ -3,6 +3,7 @@
   <div class="all-video__item"
     v-for="item in array"
   >
+  <router-link :to="{ path: `/creator-video/${item.videoId}` }">
     <div class="all-video__item-img">
       <div class="img">
         <img :src="item.photo" alt="">
@@ -15,6 +16,7 @@
       <h3>{{ item.title }}</h3>
       <p>{{ formatHoursDifference(calculateHoursAgo(item.uploaded)) }}</p>
     </div>
+  </router-link>
   </div>
  </div>
 </template>

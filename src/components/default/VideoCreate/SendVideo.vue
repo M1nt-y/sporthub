@@ -48,7 +48,7 @@ async function deleteVideo() {
         if (userData.videos) {
           const storage = getStorage();
           const videoIndex = userData.videos.findIndex((video: { videoId: number; }) => video.videoId == date.value);
-          
+          // const videoIndex = userData.videos.findIndex((video: { videoId: number; }) => video.videoId == +videoId);
           if (videoIndex !== -1) {
             userData.videos.splice(videoIndex, 1);
             
@@ -227,14 +227,18 @@ async function createVideo(){
   await setDoc(doc(db, "videos",  `video-${date.value}`), JSON.parse(JSON.stringify(videoData)));
 }
 
-async function sendVideo(){
-  if(videoState.video !== null && videoState.perview !== null){
-    await uploadVideoAndImage(videoState.video, videoState.perview)
+async function sendVideo() {
+  if (videoState.video !== null && videoState.preview !== null) {
+    if (videoState.video instanceof File && videoState.preview instanceof File) {
+      await uploadVideoAndImage(videoState.video, videoState.preview);
+    } else {
+      console.error('Both video and preview must be of type File.');
+    }
   }
-  await updateInfo()
+
+  await updateInfo();
   await createVideo();
   STATE.value = true;
 }
-
 
 </script>
