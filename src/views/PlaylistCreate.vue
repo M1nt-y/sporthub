@@ -10,6 +10,7 @@
           :text="'Save'"
           :padding="14"
           :width="180"
+          @click="addPlayList"
         />
 
         <div 
@@ -43,11 +44,12 @@
 <script setup lang="ts">
 import {ref, watchEffect, onBeforeMount, computed  } from 'vue'
 import { db } from "@/firebase/index";
-import { getDoc,  doc} from "firebase/firestore";
+import {updateDoc, getDoc,  arrayUnion, doc, } from "firebase/firestore";
 import TheButton from '@/components/UI/Buttons/TheButton.vue';
 import LogoIcon from '@/assets/icons/VideoCreate/IconBtn.vue';
 import PlaylistData from '@/components/default/Playlist/PlaylistData.vue'
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const isOpened = ref(false);
 watchEffect(() => {
@@ -100,23 +102,50 @@ onBeforeMount(() =>{
   getVideo();
 })
 
-import type { ShortVideoType } from '@/types/types.ts';
+import type { ShortVideoType } from '@/types/types';
 const filteredVideos = computed(() => {
   return ALL_VIDEO.value.filter((video:ShortVideoType) =>
     video.title.toLowerCase().includes(data.value.search.toLowerCase())
   );
 });
+
+
 const activeVideo = ref<string[]>([]);
 
+const allVideo = ref<ShortVideoType[]>([]);
 
-function setActiveVideo(id:string){
+function setActiveVideo(id: string, video: ShortVideoType) {
   if (activeVideo.value.includes(id)) {
     activeVideo.value = activeVideo.value.filter((videoId) => videoId !== id);
+    allVideo.value = allVideo.value.filter((videoId: ShortVideoType) => videoId.videoId !== video.videoId);
   } else {
     activeVideo.value = [...activeVideo.value, id];
+    allVideo.value = [...allVideo.value, video];
   }
-  console.log(id)
 }
+
+import {Playlist} from '@/types/types'
+
+async function  addPlayList() {
+  const authData = localStorage.getItem('auth');
+  const user = authData ? JSON.parse(authData) : null;
+  const playlistData = new Playlist();
+  playlistData.category = data.value.category;
+  playlistData.description = data.value.description;
+  playlistData.id = `${Date.now()}`
+  playlistData.name = data.value.name;
+  playlistData.userId =  user.user.id;
+  playlistData.videos = (allVideo.value as ShortVideoType[]) || [];
+
+
+  const info = {
+    playlists: arrayUnion(JSON.parse(JSON.stringify(playlistData)))
+  };
+
+  await updateDoc(doc(db, "publicUsers", user.user.id), info);
+  router.push('/creator-video?param=playlists')
+}
+
 
 </script>
 

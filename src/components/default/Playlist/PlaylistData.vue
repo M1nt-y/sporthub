@@ -43,7 +43,7 @@
       <div class="playlist-data__videos-item">
         <div class="video"
           v-for="(item, idx) in video"
-          @click="emitsPressed(item.videoId)"
+          @click="emitsPressed(item.videoId, item)"
           :class="{ 'video_active': activeVideo.includes(item.videoId) }"
         >
         <IconChecked class="video__checked"/>
@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { ShortVideoType } from '@/types/types.ts';
+import type { ShortVideoType } from '@/types/types';
 import TheInput from '@/components/UI/Inputs/TheInput.vue';
 import IconChecked from '@/assets/icons/PlayList/Checked.vue'
 
@@ -109,8 +109,8 @@ function formatHoursDifference(hours: any) {
 const emits = defineEmits(['pressed']);
 
 
-function emitsPressed(id: string) {
-  emits('pressed', id);
+function emitsPressed(id: string, item:  ShortVideoType,) {
+  emits('pressed', id, item);
 }
 </script>
 
