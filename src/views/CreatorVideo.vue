@@ -14,7 +14,7 @@
             </router-link>
           </p>
           <p  v-else>
-            <router-link :to="{ path: `/video-create` }">
+            <router-link :to="{ path: `/playlist-create` }">
               <IconAdd/>
               Create new playlist
             </router-link>
