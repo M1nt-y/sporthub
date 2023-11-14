@@ -27,6 +27,10 @@
           v-if="SELECTED_ROUTER === ''"
           :array="ALL_VIDEO"
         />
+        <AllPlayList
+          v-else
+          :array="ALL_PLAYLIST"
+        />
       </div>
     </div>
   </div>
@@ -36,6 +40,7 @@
 import {ref, watch, onBeforeMount} from 'vue';
 import {useRouter} from 'vue-router';
 import AllVideo from '@/components/default/CreatorVideo/AllVideo.vue'
+import AllPlayList from '@/components/default/CreatorVideo/AllPlayList.vue'
 
 import IconAdd from '@/assets/icons/video/Add.vue'
 
@@ -47,6 +52,7 @@ const router = useRouter();
 const SELECTED_ROUTER = ref('');
 
 const ALL_VIDEO = ref([])
+const ALL_PLAYLIST = ref([])
 
 function selectRouter(queryParam: string) {
   if (queryParam === "") {
@@ -95,10 +101,29 @@ async function getVideo() {
   }
 }
 
+async function getPlaylist() {
+  const authData = localStorage.getItem('auth');
+  const user = authData ? JSON.parse(authData) : null;
+  
+  if (user) {
+    const userDocRef = doc(db, 'publicUsers', user.user.id);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      if (userData && userData.playlists) {
+        ALL_PLAYLIST.value = userData.playlists;
+        console.log(ALL_PLAYLIST.value);
+      }
+    }
+  }
+}
+
 
 onBeforeMount(() =>{
   handleRouteUpdate(router.currentRoute.value);
   getVideo();
+  getPlaylist();
 })
 
 </script>
