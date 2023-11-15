@@ -25,7 +25,6 @@
           class="dropdown"
           :class="{'dropdown_active': isOpened}"
           >
-          <p class="item"   @click.stop="savedData">Edit</p>
           <p class="item" @click.stop="deleteData">Delete</p>
         </div>
       </div>
@@ -70,8 +69,9 @@ function savedData(){
   isOpened.value = false
 }
 
-function deleteData(){
-  isOpened.value = false
+async function deleteData(){
+  await deleteList();
+  isOpened.value = false;
 }
 
 const data = ref({
@@ -173,6 +173,23 @@ async function editList(){
 
   await updateDoc(userDocRef, info);
   router.push('/creator-video?param=playlists')
+}
+
+async function deleteList(){
+  ALL_PLAYLIST.value.splice(ID_PLAYLIST.value, 1);
+
+  const authData = localStorage.getItem('auth');
+  const user = authData ? JSON.parse(authData) : null;
+
+  const userDocRef = doc(db, 'publicUsers', user.user.id);
+  
+  const info = {
+    playlists: ALL_PLAYLIST.value,
+  }
+
+  await updateDoc(userDocRef, info);
+  router.push('/creator-video?param=playlists')
+
 }
 
 
