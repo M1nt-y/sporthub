@@ -47,6 +47,11 @@ const router = createRouter({
       name: RouteNamesEnum.playlistCreate,
       component: () => import("@/views/PlaylistCreate.vue")
     },
+    {
+      path: "/playlist-edit/:id",
+      name: RouteNamesEnum.playlistEdit,
+      component: () => import("@/views/PlaylistEdit.vue")
+    },
   ]
 })
 

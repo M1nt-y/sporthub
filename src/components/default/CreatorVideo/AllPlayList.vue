@@ -5,7 +5,7 @@
     v-for="item in array"
     >
       <div class="item__title">
-        <h4>{{ item.name }}</h4>
+        <h4><router-link :to="{ path: `/playlist-edit/${item.id}` }">{{ item.name }}</router-link></h4>
       </div>
 
       <div class="item__video">
