@@ -64,11 +64,6 @@ watchEffect(() => {
   }
 });
 
-
-function savedData(){
-  isOpened.value = false
-}
-
 async function deleteData(){
   await deleteList();
   isOpened.value = false;
@@ -110,12 +105,10 @@ async function getVideo() {
 async function getId(){
   const selectedItem = ALL_PLAYLIST.value.findIndex(item => item.id === route.params.id);
   ID_PLAYLIST.value = selectedItem;
-  console.log(ID_PLAYLIST.value)
   data.value.category = ALL_PLAYLIST.value[ID_PLAYLIST.value].category;
   data.value.description = ALL_PLAYLIST.value[ID_PLAYLIST.value].description;
   data.value.name = ALL_PLAYLIST.value[ID_PLAYLIST.value].name;
-  const videoIds = ALL_PLAYLIST.value[ID_PLAYLIST.value].videos.map(video => video.videoId);
-  activeVideo.value = videoIds;
+  activeVideo.value = ALL_PLAYLIST.value[ID_PLAYLIST.value].videos.map(video => video.videoId);
   allVideo.value = ALL_PLAYLIST.value[ID_PLAYLIST.value].videos
 }
 

@@ -120,10 +120,18 @@ function emitsPressed(id: string, item:  ShortVideoType,) {
   justify-content space-between
   margin-top 27px
   min-height 100vh
+  gap 40px
+
+  @media(max-width: 575px)
+    flex-direction column
+    gap 20px
 
   &__inputs
     max-width 430px
     width 100%
+
+    @media(max-width: 575px)
+      max-width 100%
 
     .input
       margin-bottom 25px
@@ -137,6 +145,9 @@ function emitsPressed(id: string, item:  ShortVideoType,) {
   &__videos
     max-width 412px
     width 100%
+
+    @media(max-width: 575px)
+      max-width 100%
 
     &-item
       margin-top 30px
