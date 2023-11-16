@@ -14,7 +14,7 @@
 
     <div class="all-video__item-info">
       <h3>{{ item.title }}</h3>
-      <p>{{ formatHoursDifference(calculateHoursAgo(item.uploaded)) }}</p>
+      <p>{{ formatTimeDifference(calculateHoursAgo(item.uploaded)) }}</p>
     </div>
   </router-link>
   </div>
@@ -34,18 +34,27 @@ defineProps({
   },
 })
 
-function calculateHoursAgo(timestamp: any) {
+function calculateHoursAgo(timestamp: Date): number {
   const currentTime = new Date().getTime();
   const targetTime = new Date(timestamp).getTime();
-  const timeDifference = currentTime - targetTime; 
-  const hoursAgo = timeDifference / (1000 * 60 * 60); 
+  const timeDifference = currentTime - targetTime;
+  const hoursAgo = Math.floor(timeDifference / (1000 * 60 * 60));
   return hoursAgo;
 }
 
-function formatHoursDifference(hours: any) {
+function formatTimeDifference(hours: number): string {
   const absoluteHours = Math.abs(hours);
-  const displayHours = Math.floor(absoluteHours);
-  return `${displayHours} час/ов`;
+
+  const days = Math.floor(absoluteHours / 24);
+  const remainingHours = absoluteHours % 24;
+
+  if (days > 0) {
+    return `${days} дней назад`;
+  } else if (remainingHours > 0) {
+    return `${remainingHours} час/ов назад`;
+  } else {
+    return 'Только что';
+  }
 }
 
 </script>

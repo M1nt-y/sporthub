@@ -231,6 +231,7 @@ async function sendVideo() {
   if (videoState.video !== null && videoState.preview !== null) {
     if (videoState.video instanceof File && videoState.preview instanceof File) {
       await uploadVideoAndImage(videoState.video, videoState.preview);
+      router.push(`/creator-video/`)
     } else {
       console.error('Both video and preview must be of type File.');
     }
