@@ -18,7 +18,7 @@ import AppLayout from "@/layouts/AppLayout.vue";
   font-size 100%
   box-sizing border-box
   vertical-align baseline
-  font-family Uto, sans-serif
+  font-family Montserrat, sans-serif
 
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section

@@ -148,7 +148,7 @@ onBeforeMount(() =>{
 
     &-select
       color #BBB
-      font-family Uto
+      font-family Montserrat
       font-size 24px
       font-weight 500
       display flex
@@ -176,7 +176,7 @@ onBeforeMount(() =>{
         background #AD7955
         padding 11px 17px
         color #FFF
-        font-family Uto
+        font-family Montserrat
         font-size 16px
         font-weight 600
         cursor pointer

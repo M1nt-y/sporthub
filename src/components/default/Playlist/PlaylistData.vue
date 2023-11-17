@@ -146,7 +146,7 @@ function emitsPressed(id: string, item:  ShortVideoType,) {
       p
         margin-bottom 4px
         color #FFF
-        font-family Uto
+        font-family Montserrat
         font-size 14px
         font-weight 400
   
@@ -207,7 +207,7 @@ function emitsPressed(id: string, item:  ShortVideoType,) {
 
           p
             color #FFF
-            font-family Uto
+            font-family Montserrat
             font-size 13px
             font-weight 400
 
@@ -218,7 +218,7 @@ function emitsPressed(id: string, item:  ShortVideoType,) {
 
           h3
             color #FFF
-            font-family Uto
+            font-family Montserrat
             font-size 18px
             font-weight 500
             line-height 20px

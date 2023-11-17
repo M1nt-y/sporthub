@@ -17,4 +17,5 @@ export enum RouteNamesEnum {
     editVideo = "edit-video",
     playlistCreate = "playlist-create",
     playlistEdit = "playlist-edit",
+    userVideo = "user-video",
 }

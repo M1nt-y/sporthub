@@ -86,7 +86,7 @@ function emitsPressed() {
   cursor pointer
   color #FFF
   text-align center
-  font-family Uto, sans-serif
+  font-family Montserrat, sans-serif
   font-size 16px
   font-weight 600
   border-radius 8px

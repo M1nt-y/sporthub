@@ -83,7 +83,7 @@ function formatTimeDifference(hours: number): string {
         cursor pointer
         h4
           color #FFF
-          font-family Uto
+          font-family Montserrat
           font-size 20px
           font-weight 600
       
@@ -131,7 +131,7 @@ function formatTimeDifference(hours: number): string {
 
               p
                 color #FFF
-                font-family Uto
+                font-family Montserrat
                 font-size 10px;
                 font-style normal
 
@@ -152,7 +152,7 @@ function formatTimeDifference(hours: number): string {
             border-radius 0 0 8px 8px
             h5
               color #FFF
-              font-family Uto
+              font-family Montserrat
               font-size 14px
               font-weight 500
               line-height 16px
