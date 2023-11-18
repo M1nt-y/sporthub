@@ -47,10 +47,9 @@ const props = defineProps({
 const authData = ref(localStorage.getItem('auth'));
 const user = ref(authData.value ? JSON.parse(authData.value) : null);
 
-
 const isActive = ref(false);
 const isUserSubscriber = computed(() => {
-  if (user.value.user) {
+  if (user.value && user.value.user) {
     if (props.userInfo.subscribers && props.userInfo.subscribers.length > 0) {
       return props.userInfo.subscribers.some((subscriber: { userId: string }) => subscriber.userId === user.value.user.id);
     }
@@ -58,7 +57,6 @@ const isUserSubscriber = computed(() => {
   }
   return true;
 });
-
 
 import { ShortUser } from '@/types/types';
 
