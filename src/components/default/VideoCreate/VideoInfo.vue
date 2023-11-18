@@ -74,6 +74,9 @@
         <div class="img" v-if="img">
           <img v-if="img" :src="URL.createObjectURL(img)" alt="">
         </div>
+        <div class="img" v-else>
+          <img v-if="typeof videoState.preview === 'string'" :src="videoState.preview" alt="">
+        </div>
       </div>
     </div>
   </div>
@@ -116,7 +119,7 @@ const handleFileChange = (event: any) => {
   const files = event.target.files;
   if (files && files.length === 1) {
     img.value = files[0];
-    videoState.perview = files[0];
+    videoState.preview = files[0];
   }
 };
 
@@ -129,7 +132,7 @@ async function handleDrop(event: DragEvent) {
     if (file.type.startsWith('image/')) {
       isDragging.value = false;
       img.value = file;
-      videoState.perview = file;
+      videoState.preview = file;
       console.log(`Добавлено фото:: ${URL_IMAGE.value}`);
     } else {
       console.log(`Неверный тип файла: ${file.type}`);
@@ -174,7 +177,7 @@ defineProps({
   }
 })
 
-videoState.perview = null;
+videoState.preview = null;
 </script>
 
 <style lang="stylus">

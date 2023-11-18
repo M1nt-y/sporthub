@@ -121,7 +121,7 @@ class Playlist implements PlaylistType {
     isPublished = null;
     name = "";
     userId = "";
-    videos = [];
+    videos: ShortVideoType[] | [] = [];
 }
 
 type UserType = {

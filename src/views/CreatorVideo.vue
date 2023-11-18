@@ -8,14 +8,17 @@
         </div>
         <div class="creator-video__header-btn">
           <p  v-if="SELECTED_ROUTER === ''">
-            <IconAdd/>
             <router-link :to="{ path: `/video-create` }">
+              <IconAdd/>
               Add new video
             </router-link>
           </p>
           <p  v-else>
-            <IconAdd/>
-            Create new playlist</p>
+            <router-link :to="{ path: `/playlist-create` }">
+              <IconAdd/>
+              Create new playlist
+            </router-link>
+          </p>
         </div>
       </div>
 
@@ -23,6 +26,10 @@
         <AllVideo
           v-if="SELECTED_ROUTER === ''"
           :array="ALL_VIDEO"
+        />
+        <AllPlayList
+          v-else
+          :array="ALL_PLAYLIST"
         />
       </div>
     </div>
@@ -33,6 +40,7 @@
 import {ref, watch, onBeforeMount} from 'vue';
 import {useRouter} from 'vue-router';
 import AllVideo from '@/components/default/CreatorVideo/AllVideo.vue'
+import AllPlayList from '@/components/default/CreatorVideo/AllPlayList.vue'
 
 import IconAdd from '@/assets/icons/video/Add.vue'
 
@@ -44,6 +52,7 @@ const router = useRouter();
 const SELECTED_ROUTER = ref('');
 
 const ALL_VIDEO = ref([])
+const ALL_PLAYLIST = ref([])
 
 function selectRouter(queryParam: string) {
   if (queryParam === "") {
@@ -92,10 +101,29 @@ async function getVideo() {
   }
 }
 
+async function getPlaylist() {
+  const authData = localStorage.getItem('auth');
+  const user = authData ? JSON.parse(authData) : null;
+  
+  if (user) {
+    const userDocRef = doc(db, 'publicUsers', user.user.id);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      if (userData && userData.playlists) {
+        ALL_PLAYLIST.value = userData.playlists;
+        console.log(ALL_PLAYLIST.value);
+      }
+    }
+  }
+}
+
 
 onBeforeMount(() =>{
   handleRouteUpdate(router.currentRoute.value);
   getVideo();
+  getPlaylist();
 })
 
 </script>
@@ -120,7 +148,7 @@ onBeforeMount(() =>{
 
     &-select
       color #BBB
-      font-family Uto
+      font-family Montserrat
       font-size 24px
       font-weight 500
       display flex
@@ -143,12 +171,12 @@ onBeforeMount(() =>{
           color white
     
     &-btn
-      p
+      a
         border-radius 8px
         background #AD7955
         padding 11px 17px
         color #FFF
-        font-family Uto
+        font-family Montserrat
         font-size 16px
         font-weight 600
         cursor pointer

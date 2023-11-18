@@ -42,6 +42,26 @@ const router = createRouter({
       name: RouteNamesEnum.creatorVideo,
       component: () => import("@/views/CreatorVideo.vue")
     },
+    {
+      path: "/creator-video/:id",
+      name: RouteNamesEnum.editVideo,
+      component: () => import("@/views/EditVideo.vue")
+    },
+    {
+      path: "/playlist-create",
+      name: RouteNamesEnum.playlistCreate,
+      component: () => import("@/views/PlaylistCreate.vue")
+    },
+    {
+      path: "/playlist-edit/:id",
+      name: RouteNamesEnum.playlistEdit,
+      component: () => import("@/views/PlaylistEdit.vue")
+    },
+    {
+      path: "/videos/:id",
+      name: RouteNamesEnum.userVideo,
+      component: () => import("@/views/UserVideo.vue")
+    },
   ]
 })
 
