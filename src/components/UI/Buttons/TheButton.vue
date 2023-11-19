@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import IconSearch from '@/assets/icons/Button/Search.vue';
+import IconSearch from '@/assets/icons/Button/IconSearch.vue';
 
 defineProps({
   width: {

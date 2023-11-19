@@ -3,13 +3,14 @@
   <div class="all-list__content">
     <div class="item"
     v-for="item in array"
+    :key="item.id"
     >
       <div class="item__title">
         <h4><router-link :to="{ path: `/playlist-edit/${item.id}` }">{{ item.name }}</router-link></h4>
       </div>
 
       <div class="item__video">
-        <div class="video" v-for="video in item.videos">
+        <div class="video" v-for="video in item.videos" :key="video.videoId">
           <div class="video__img">
             <div class="img">
               <img :src="video.photo" alt="">
@@ -41,7 +42,7 @@ import type {PlaylistType} from '@/types/types'
 defineProps({
   array: {
     type: Array as PropType<PlaylistType[]>,
-    default: [],
+    default: () => [],
   },
 })
 

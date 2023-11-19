@@ -28,7 +28,6 @@ const router = useRouter();
 const date = ref(Date.now())
 
 const STATE = ref(false)
-const VIDEO_DURATION = ref('')
 
 function saveInfo(){
   console.log('Сохранять данные')
@@ -165,7 +164,7 @@ async function uploadVideoAndImage(videoFile: File, imageFile: File) {
 }
 
 async function getVideoDuration(videoFile: any): Promise<string> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const videoElement = document.createElement('video');
     videoElement.src = URL.createObjectURL(videoFile);
     videoElement.addEventListener('loadedmetadata', () => {

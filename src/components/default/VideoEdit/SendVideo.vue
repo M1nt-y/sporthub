@@ -19,7 +19,7 @@
 import {ref, onBeforeMount} from 'vue';
 import {Video} from '@/types/types'
 import { db } from "@/firebase/index";
-import {updateDoc, getDoc,  doc, setDoc, deleteDoc, collection } from "firebase/firestore";
+import {updateDoc, getDoc,  doc, deleteDoc, collection } from "firebase/firestore";
 import {getDownloadURL, getStorage, ref as storageRef, uploadBytesResumable, deleteObject } from 'firebase/storage'
 import VideoHeader from '@/components/default/VideoCreate/VideoHeader.vue'
 import VideoInfo from '@/components/default/VideoCreate/VideoInfo.vue'

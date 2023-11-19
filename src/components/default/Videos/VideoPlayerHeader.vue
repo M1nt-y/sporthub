@@ -32,8 +32,8 @@
 
 <script lang="ts" setup>
 import {ref, computed } from 'vue'
-import IconBack from '@/assets/icons/video/Back.vue'
-import IconBuy from '@/assets/icons/video/Buy.vue'
+import IconBack from '@/assets/icons/video/IconBack.vue'
+import IconBuy from '@/assets/icons/video/IconBuy.vue'
 import TheButton from '@/components/UI/Buttons/TheButton.vue';
 
 import type { UserType } from '@/types/types';
@@ -47,10 +47,9 @@ const props = defineProps({
 const authData = ref(localStorage.getItem('auth'));
 const user = ref(authData.value ? JSON.parse(authData.value) : null);
 
-
 const isActive = ref(false);
 const isUserSubscriber = computed(() => {
-  if (user.value.user) {
+  if (user.value && user.value.user) {
     if (props.userInfo.subscribers && props.userInfo.subscribers.length > 0) {
       return props.userInfo.subscribers.some((subscriber: { userId: string }) => subscriber.userId === user.value.user.id);
     }
@@ -60,7 +59,6 @@ const isUserSubscriber = computed(() => {
 });
 
 
-import { ShortUser } from '@/types/types';
 
 
 </script>

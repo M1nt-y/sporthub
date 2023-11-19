@@ -1,6 +1,6 @@
 import {defineComponent} from 'vue';
 import TheButton from './TheButton.vue';
-import IconSearch from '@/assets/icons/Button/Search.vue';
+import IconSearch from '@/assets/icons/Button/IconSearch.vue';
 
 interface ButtonProps {
     width: number;

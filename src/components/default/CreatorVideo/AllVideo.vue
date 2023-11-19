@@ -2,6 +2,7 @@
  <div class="all-video">
   <div class="all-video__item"
     v-for="item in array"
+    :key="item.videoId"
   >
   <router-link :to="{ path: `/creator-video/${item.videoId}` }">
     <div class="all-video__item-img">
@@ -22,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import IconsPlay from '@/assets/icons/video/Play.vue'
+import IconsPlay from '@/assets/icons/video/IconPlay.vue'
 import type { PropType } from 'vue'
 import type {ShortVideoType} from '@/types/types'
 
@@ -30,7 +31,7 @@ import type {ShortVideoType} from '@/types/types'
 defineProps({
   array: {
     type: Array as PropType<ShortVideoType[]>,
-    default: [],
+    default: () => [],
   },
 })
 
