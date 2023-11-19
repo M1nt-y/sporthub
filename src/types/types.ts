@@ -60,6 +60,7 @@ type VideoType = {
     id: string
     title: string
     uploaded: Date
+    author: ShortUserType
     description: string
     category: string
     link: string
@@ -84,6 +85,7 @@ class Video implements VideoType {
     title = "";
     video = new FileClass();
     uploaded = new Date();
+    author = new ShortUser();
 }
 
 type ShortVideoType = {
@@ -91,15 +93,15 @@ type ShortVideoType = {
     photo: string
     title: string
     duration: string
-    author: ShortUserType
+    uploaded: Date
 }
 
 class ShortVideo implements ShortVideoType {
-    author = new ShortUser();
     duration = "";
     photo = "";
     title = "";
     videoId = "";
+    uploaded = new Date();
 }
 
 type PlaylistType = {
@@ -119,7 +121,7 @@ class Playlist implements PlaylistType {
     isPublished = null;
     name = "";
     userId = "";
-    videos = [];
+    videos: ShortVideoType[] | [] = [];
 }
 
 type UserType = {
@@ -141,7 +143,7 @@ type UserType = {
     twitter: string,
     stores: StoreType[] | [],
     playlists: PlaylistType[] | [],
-    videos: VideoType[] | [],
+    videos: ShortVideoType[] | [],
     subscriptions: ShortUserType[] | [],
     subscribers: string[] | [],
     viewHistory: ShortVideoType[] | [],

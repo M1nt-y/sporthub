@@ -1,111 +1,129 @@
 <template>
-<div class="video-info">
-  <div class="video-block">
-    <video  width="920" height="518">
-      <source v-if="videoState.video" :src="URL.createObjectURL(videoState.video)" type="video/mp4">
-    </video>
+  <div class="video-info">
+    <div class="video-block">
+      <video :controls="progresVideo == 100" width="920" height="518">
+        <source :src="video" type="video/mp4">
+      </video>
 
-    <div class="video-block__content">
-      <h3>Processing will begin shortly</h3>
-      <p v-if="videoState.video !== null">{{ videoState.video.name }}</p>
+      <div class="video-block__content" v-if="progresVideo !== 100">
+        <h3>Processing will begin shortly</h3>
+        <h5>{{ Math.round(progresVideo) }} %</h5>
+        <p>{{ videoName }}</p>
+      </div>
+    </div>
+
+    <div class="video-info__users">
+      <div class="video-info__users-inputs">
+        <div class="input">
+          <p>Title</p>
+
+          <TheInput
+              v-model="localData.title"
+              :placeholder="'Video Name'"
+              :padding="16"
+          />
+        </div>
+
+        <div class="input">
+          <p>Category</p>
+
+          <TheInput
+              v-model="localData.category"
+              :placeholder="'Select category'"
+              :padding="16"
+          />
+        </div>
+
+        <div class="input">
+          <p>Description</p>
+
+          <TheInput
+              v-model="localData.description"
+              :placeholder="'Description'"
+              :padding="16"
+          />
+        </div>
+
+        <div class="input">
+          <p>Add Shopify link</p>
+
+          <TheInput
+              v-model="localData.link"
+              :placeholder="'Add Shopify link'"
+              :padding="16"
+          />
+        </div>
+      </div>
+
+      <div class="video-info__users-img"
+           @dragover.prevent
+           @drop="handleDrop($event)"
+           @dragenter="dragEnter"
+           @dragleave="dragLeave"
+           @click="openFileInput"
+           :class="{ 'video-info__users-img_using': isDragging }"
+      >
+        <IconUpload/>
+
+        <h3 v-if="!img">Drag and drop photo to upload</h3>
+
+        <p v-if="!img">Information about adding photo. Amet minim mollit non deserunt ullamco est sit </p>
+
+        <input ref="fileInput" type="file" style="display: none" @change="handleFileChange" accept="image/*">
+
+        <div class="img" v-if="img">
+          <img v-if="img" :src="URL.createObjectURL(img)" alt="">
+        </div>
+        <div class="img" v-else>
+          <img v-if="typeof videoState.preview === 'string'" :src="videoState.preview" alt="">
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="video-info__users">
-    <div class="video-info__users-inputs">
-      <div class="input">
-        <p>Title</p>
-        <TheInput
-          v-model="data.title"
-          :placeholder="'Video Name'"
-          :padding="16"
-        />
-      </div>
-      <div class="input">
-        <p>Category</p>
-        <TheInput
-          v-model="data.category"
-          :placeholder="'Select category'"
-          :padding="16"
-        />
-      </div>
-      <div class="input">
-        <p>Description</p>
-        <TheInput
-          v-model="data.description"
-          :placeholder="'Description'"
-          :padding="16"
-        />
-      </div>
-      <div class="input">
-        <p>Add Shopify link</p>
-        <TheInput
-          v-model="data.link"
-          :placeholder="'Add Shopify link'"
-          :padding="16"
-        />
-      </div>
-    </div>
-
-    <div class="video-info__users-img"
-      @dragover.prevent 
-      @drop="handleDrop($event)"
-      @dragenter="dragEnter"
-      @dragleave="dragLeave"
-      @click="openFileInput"
-      :class="{ 'video-info__users-img_using': isDragging }"
-    >
-      <IconUpload/>
-      <h3 v-if="!img">Drag and drop photo to upload</h3>
-      <p v-if="!img">Information about adding photo. Amet minim mollit non deserunt ullamco est sit </p>
-      <input ref="fileInput" type="file" style="display: none" @change="handleFileChange" accept="image/*">
-
-      <div class="img" v-if="img">
-        <img v-if="img" :src="URL.createObjectURL(img)" alt="">
-      </div>
-    </div>
-  </div>
-</div>
-
 </template>
 
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import {ref} from 'vue';
+
 import IconUpload from '@/assets/icons/VideoCreate/IconUpload.vue'
-import { stateVideo } from '@/stores/video-create';
+
 import TheInput from '@/components/UI/Inputs/TheInput.vue';
 
-const { URL } = window;
+import {stateVideo} from '@/stores/video-create';
 const videoState = stateVideo();
+
+
+const {URL} = window;
+
 
 const img = ref(null as File | null)
 
-const isDragging = ref(false)
-const data = ref({
-  title: '',
-  category: '',
-  description: '',
-  link: '',
-})
+const URL_IMAGE = ref('')
 
-const fileInput = ref<HTMLInputElement | null>(null) 
-  const openFileInput = () => {
+const isDragging = ref(false)
+
+const imgUpdate = ref(null as Boolean | null);
+
+const fileInput = ref<HTMLInputElement | null>(null);
+
+const openFileInput = () => {
   const filesInput = fileInput.value;
   if (filesInput) {
     filesInput.click();
+    imgUpdate.value = true;
   }
 };
 
 const handleFileChange = (event: any) => {
   const files = event.target.files;
   if (files && files.length === 1) {
-    const file = files[0];
-    img.value = file;
+    img.value = files[0];
+    videoState.preview = files[0];
   }
 };
 
-function handleDrop(event: DragEvent) {
+async function handleDrop(event: DragEvent) {
   event.preventDefault();
   const files = event.dataTransfer?.files;
 
@@ -114,7 +132,8 @@ function handleDrop(event: DragEvent) {
     if (file.type.startsWith('image/')) {
       isDragging.value = false;
       img.value = file;
-      console.log(`Добавлено фото:: ${file.name}`);
+      videoState.preview = file;
+      console.log(`Добавлено фото:: ${URL_IMAGE.value}`);
     } else {
       console.log(`Неверный тип файла: ${file.type}`);
       isDragging.value = false;
@@ -133,8 +152,34 @@ function dragLeave() {
   isDragging.value = false;
 }
 
-</script>
 
+const props = defineProps({
+  data: {
+    type: Object,
+    default: () => ({
+      name: '',
+      description: '',
+      category: '',
+    }),
+  },
+  video: {
+    type: String,
+    default: '',
+  },
+  videoName: {
+    type: String,
+    default: '',
+  },
+  progresVideo: {
+    type: Number,
+    default: 0,
+  }
+})
+
+const localData = ref(props.data)
+
+videoState.preview = null;
+</script>
 
 <style lang="stylus">
 .video-info
@@ -147,20 +192,20 @@ function dragLeave() {
     align-items flex-start
     justify-content space-between
 
-    @media(max-width: 680px)
+    @media (max-width: 680px)
       flex-direction column
 
     &-inputs
       max-width 430px
       width 100%
 
-      @media(max-width: 680px)
+      @media (max-width: 680px)
         max-width 100%
 
       .input
         margin-bottom 36px
 
-        @media(max-width: 680px)
+        @media (max-width: 680px)
           margin-bottom 24px
 
         p
@@ -168,7 +213,7 @@ function dragLeave() {
           font-size 14px
           font-weight 400
           margin-bottom 4px
-    
+
     &-img
       position relative
       cursor pointer
@@ -214,7 +259,7 @@ function dragLeave() {
           path
             fill white
 
-      @media(max-width: 680px)
+      @media (max-width: 680px)
         max-width 100%
         margin-left 0
 
@@ -225,7 +270,7 @@ function dragLeave() {
         pointer-events none
         user-select none
 
-        @media(max-width: 680px)
+        @media (max-width: 680px)
           margin-top 0
 
       h3
@@ -239,7 +284,7 @@ function dragLeave() {
         margin-bottom 8px
         pointer-events none
         user-select none
-      
+
       p
         color #EEE
         text-align center
@@ -282,8 +327,17 @@ function dragLeave() {
       font-size 36px
       font-weight 500
 
-      @media(max-width: 575px)
+      @media (max-width: 575px)
         font-size 16px
+
+    h5
+      margin-top 20px
+      color #FFF
+      font-size 20px
+      font-family Times
+
+      @media (max-width: 575px)
+        font-size 15px
 
     p
       margin-top 40px
@@ -292,6 +346,6 @@ function dragLeave() {
       font-size 18px
       font-weight 500
 
-      @media(max-width: 575px)
+      @media (max-width: 575px)
         font-size 12px
 </style>

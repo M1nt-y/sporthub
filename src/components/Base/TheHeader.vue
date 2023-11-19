@@ -23,9 +23,13 @@
         <NotificationIcon/>
       </div>
 
-      <div class="header__link" v-if="user && user.isBusiness">Video</div>
+      <RouterLink to="/profile/videos" class="header__link" v-if="user && user.isBusiness">
+        Video
+      </RouterLink>
 
-      <div class="header__link" v-if="user && user.isBusiness">Store</div>
+      <RouterLink to="/profile/stores" class="header__link" v-if="user && user.isBusiness">
+        Store
+      </RouterLink>
 
       <div class="header__profile" v-if="currentUser">
         <div class="header__profile-bar" @click.stop="displayLinks = !displayLinks">
@@ -37,13 +41,13 @@
         </div>
 
         <div class="header__profile-dropdown" v-if="displayLinks" @click.stop>
-          <div class="header__profile-link">
+          <RouterLink to="/profile" class="header__profile-link">
             <div class="header__profile-icon">
               <EditIcon/>
             </div>
 
             Edit profile
-          </div>
+          </RouterLink>
 
           <div class="header__profile-link" v-if="user && !user.isBusiness">
             <div class="header__profile-icon">
@@ -117,6 +121,10 @@ onMounted(async () => {
 
 async function handleSignOut() {
   currentUser.value = null
+
+  localStorage.removeItem('isAuthorised')
+  localStorage.removeItem('isCreator')
+
   await signOut(auth)
 }
 </script>
