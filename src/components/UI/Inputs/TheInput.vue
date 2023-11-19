@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from 'vue';
-import IconSearch from '@/assets/icons/Button/Search.vue'
+import IconSearch from '@/assets/icons/Button/IconSearch.vue'
 import IconShowPassOne from '@/assets/icons/Input/ShowPassOne.vue'
 import IconShowPassTwo from '@/assets/icons/Input/ShowPassTwo.vue'
 

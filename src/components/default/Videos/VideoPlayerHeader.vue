@@ -32,8 +32,8 @@
 
 <script lang="ts" setup>
 import {ref, computed } from 'vue'
-import IconBack from '@/assets/icons/video/Back.vue'
-import IconBuy from '@/assets/icons/video/Buy.vue'
+import IconBack from '@/assets/icons/video/IconBack.vue'
+import IconBuy from '@/assets/icons/video/IconBuy.vue'
 import TheButton from '@/components/UI/Buttons/TheButton.vue';
 
 import type { UserType } from '@/types/types';
@@ -58,7 +58,7 @@ const isUserSubscriber = computed(() => {
   return true;
 });
 
-import { ShortUser } from '@/types/types';
+
 
 
 </script>

@@ -18,7 +18,7 @@
           <p>Title</p>
 
           <TheInput
-              v-model="data.title"
+              v-model="localData.title"
               :placeholder="'Video Name'"
               :padding="16"
           />
@@ -28,7 +28,7 @@
           <p>Category</p>
 
           <TheInput
-              v-model="data.category"
+              v-model="localData.category"
               :placeholder="'Select category'"
               :padding="16"
           />
@@ -38,7 +38,7 @@
           <p>Description</p>
 
           <TheInput
-              v-model="data.description"
+              v-model="localData.description"
               :placeholder="'Description'"
               :padding="16"
           />
@@ -48,7 +48,7 @@
           <p>Add Shopify link</p>
 
           <TheInput
-              v-model="data.link"
+              v-model="localData.link"
               :placeholder="'Add Shopify link'"
               :padding="16"
           />
@@ -153,15 +153,14 @@ function dragLeave() {
 }
 
 
-defineProps({
+const props = defineProps({
   data: {
     type: Object,
-    default: {
-      title: '',
-      category: '',
+    default: () => ({
+      name: '',
       description: '',
-      link: '',
-    }
+      category: '',
+    }),
   },
   video: {
     type: String,
@@ -176,6 +175,8 @@ defineProps({
     default: 0,
   }
 })
+
+const localData = ref(props.data)
 
 videoState.preview = null;
 </script>

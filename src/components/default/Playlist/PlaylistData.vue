@@ -5,7 +5,7 @@
           <p>Playlist name</p>
 
           <TheInput
-            v-model="data.name"
+            v-model="localData.name"
             :placeholder="'Enter playlist name'"
             :padding="16"
           />
@@ -15,7 +15,7 @@
           <p>Description</p>
 
           <TheInput
-            v-model="data.description"
+            v-model="localData.description"
             :placeholder="'Description'"
             :padding="16"
           />
@@ -25,7 +25,7 @@
           <p>Category</p>
 
           <TheInput
-            v-model="data.category"
+            v-model="localData.category"
             :placeholder="'Category'"
             :padding="16"
           />
@@ -37,12 +37,13 @@
         :searchLeft="true"
         :padding="10"
         :placeholder="'Search'"
-        v-model="data.search"
+        v-model="localData.search"
       />
 
       <div class="playlist-data__videos-item">
         <div class="video"
-          v-for="(item, idx) in video"
+          v-for="item in video"
+          :key="item.videoId"
           @click="emitsPressed(item.videoId, item)"
           :class="{ 'video_active': activeVideo.includes(item.videoId) }"
         >
@@ -68,29 +69,32 @@
 </template>
 
 <script lang="ts" setup>
+import {ref} from 'vue'
 import type { ShortVideoType } from '@/types/types';
 import TheInput from '@/components/UI/Inputs/TheInput.vue';
-import IconChecked from '@/assets/icons/PlayList/Checked.vue'
+import IconChecked from '@/assets/icons/PlayList/IconChecked.vue'
 
-defineProps({
+const props = defineProps({
   data: {
     type: Object,
-    default: {
+    default: () => ({
       name: '',
       description: '',
       category: '',
       search: '',
-    }
+    }),
   },
   video: {
     type: Array as () => ShortVideoType[],
-    default: [],
+    default: () => [],
   },
   activeVideo: {
     type: Array as () => string[],
     default: () => [],
   },
 })
+
+const localData = ref(props.data);
 
 function calculateHoursAgo(timestamp: Date): number {
   const currentTime = new Date().getTime();

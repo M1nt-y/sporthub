@@ -42,7 +42,7 @@ import {useRouter} from 'vue-router';
 import AllVideo from '@/components/default/CreatorVideo/AllVideo.vue'
 import AllPlayList from '@/components/default/CreatorVideo/AllPlayList.vue'
 
-import IconAdd from '@/assets/icons/video/Add.vue'
+import IconAdd from '@/assets/icons/video/IconAdd.vue'
 
 import { db } from "@/firebase/index";
 import { getDoc,  doc} from "firebase/firestore";
@@ -75,7 +75,7 @@ function handleRouteUpdate(to: any) {
   }
 }
 
-watch(() => router.currentRoute.value.query, (newQuery, oldQuery) => {
+watch(() => router.currentRoute.value.query, (newQuery) => {
   const queryParam = newQuery.param;
   if (!queryParam) {
     SELECTED_ROUTER.value = '';
