@@ -62,6 +62,10 @@ async function handleLogin() {
         querySnapshot.forEach((doc) => {
           user.value = doc.data() as UserType
         })
+        localStorage.setItem('isAuthorised', 'true')
+        if (user.value.isBusiness) {
+          localStorage.setItem('isCreator', 'true')
+        }
         await router.push('/')
       })
       .catch((error) => {

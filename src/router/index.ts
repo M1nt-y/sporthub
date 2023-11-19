@@ -29,33 +29,57 @@ const router = createRouter({
     },
     {
       path: "/profile",
-      name: RouteNamesEnum.profileEdit,
-      component: () => import("@/views/ProfileEditView.vue")
-    },
-    {
-      path: "/video-create",
-      name: RouteNamesEnum.videoCreate,
-      component: () => import("@/views/VideocreateView.vue")
+      meta: {
+        requiresAuth: true
+      },
+      children: [
+        {
+          path: '',
+          name: RouteNamesEnum.profileEdit,
+          component: () => import("@/views/ProfileEditView.vue")
+        },
+        {
+          path: 'stores',
+          meta: {
+            isCreator: true
+          },
+          name: RouteNamesEnum.profileStores,
+          component: () => import("@/views/ProfileStoresView.vue")
+        },
+        {
+          path: 'videos',
+          meta: {
+            isCreator: true
+          },
+          name: RouteNamesEnum.profileVideos,
+          component: () => import("@/views/ProfileVideosView.vue")
+        },
+        {
+          path: "videos/create",
+          name: RouteNamesEnum.videoCreate,
+          component: () => import("@/views/ProfileVideosCreateView.vue")
+        },
+        {
+          path: "videos/:id",
+          name: RouteNamesEnum.editVideo,
+          component: () => import("@/views/ProfileVideosEditView.vue")
+        },
+        {
+          path: "playlists/create",
+          name: RouteNamesEnum.playlistCreate,
+          component: () => import("@/views/ProfilePlaylistsCreate.vue")
+        },
+        {
+          path: "playlists/:id",
+          name: RouteNamesEnum.playlistEdit,
+          component: () => import("@/views/ProfilePlaylistsEdit.vue")
+        },
+      ]
     },
     {
       path: "/creator-video",
       name: RouteNamesEnum.creatorVideo,
       component: () => import("@/views/CreatorVideo.vue")
-    },
-    {
-      path: "/creator-video/:id",
-      name: RouteNamesEnum.editVideo,
-      component: () => import("@/views/EditVideo.vue")
-    },
-    {
-      path: "/playlist-create",
-      name: RouteNamesEnum.playlistCreate,
-      component: () => import("@/views/PlaylistCreate.vue")
-    },
-    {
-      path: "/playlist-edit/:id",
-      name: RouteNamesEnum.playlistEdit,
-      component: () => import("@/views/PlaylistEdit.vue")
     },
     {
       path: "/videos/:id",
@@ -65,6 +89,28 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(loadLayoutMiddleware);
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (window.localStorage.getItem('isAuthorised')) {
+      await loadLayoutMiddleware(to)
+      next()
+    } else {
+      await loadLayoutMiddleware(from)
+      next('/')
+    }
+  }
+  // else if (to.matched.some((record) => record.meta.isCreator)) {
+  //   if (window.localStorage.getItem('isCreator')) {
+  //     next()
+  //   }
+  //   else {
+  //     next('/')
+  //   }
+  // }
+  else {
+    await loadLayoutMiddleware(to)
+    next()
+  }
+});
 
 export default router

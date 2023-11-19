@@ -1,5 +1,6 @@
 <template>
   <TheHeader/>
+  <TheNavbar/>
   <main class="main">
     <slot />
   </main>
@@ -7,8 +8,5 @@
 
 <script setup lang="ts">
 import TheHeader from '@/components/Base/TheHeader.vue'
+import TheNavbar from '@/components/Base/TheNavbar.vue'
 </script>
-
-<style scoped lang="stylus">
-
-</style>

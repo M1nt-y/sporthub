@@ -13,6 +13,8 @@ export enum RouteNamesEnum {
     login = "login",
     signup = "signup",
     profileEdit = "profile-edit",
+    profileStores = "profile-stores",
+    profileVideos = "profile-videos",
     videoCreate = "video-create",
     creatorVideo = "creator-video",
     editVideo = "edit-video",
