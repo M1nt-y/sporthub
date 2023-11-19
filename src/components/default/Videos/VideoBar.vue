@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import IconLikes from '@/assets/icons/video/Like.vue'
+import IconLikes from '@/assets/icons/video/IconLike.vue'
 </script>
 
 <style lang="stylus">
