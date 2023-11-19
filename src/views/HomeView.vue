@@ -16,12 +16,12 @@
     <div
         class="home__videos-item"
         v-for="item in array"
-        :key="item.id"
+        :key="item.videoId"
     >
-      <router-link :to="{ path: `/videos/${item.id}` }">
+      <router-link :to="{ path: `/videos/${item.videoId}` }">
         <div class="home__videos-item-img">
           <div class="img">
-            <img :src="item.preview.link" alt="">
+            <img :src="item.photo" alt="">
           </div>
           <IconsPlay/>
           <p class="home__videos-duration">{{ item.duration }}</p>
@@ -38,14 +38,15 @@
 </template>
 
 <script setup lang="ts">
+import type {Ref} from 'vue'
 import { db } from '@/firebase'
 import { collection, getDocs } from 'firebase/firestore'
-import IconsPlay from '@/assets/icons/video/Play.vue'
+import IconsPlay from '@/assets/icons/video/IconPlay.vue'
 import type {ShortVideoType} from '@/types/types'
 import {onMounted, ref} from "vue";
 
 
-const array:ShortVideoType[] = ref([])
+const array: Ref<ShortVideoType[]> = ref([])
 
 async function getVideos() {
   const querySnapshot = await getDocs(collection(db, "videos"))
@@ -85,7 +86,7 @@ function formatTimeDifference(hours: number): string {
 <style scoped lang="stylus">
 .home
   width 100%
-  margin-left 260px
+  padding-left 260px
   padding-right 24px
 
   &__categories

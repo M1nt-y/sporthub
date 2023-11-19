@@ -18,8 +18,12 @@
 
 <style scoped lang="stylus">
 .navbar
+  position absolute
+  //position fixed
   padding 24px
   min-width 260px
+  left 0
+  top 62px
 
   &__links
     margin-bottom 24px

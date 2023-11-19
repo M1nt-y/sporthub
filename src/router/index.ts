@@ -77,11 +77,6 @@ const router = createRouter({
       ]
     },
     {
-      path: "/creator-video",
-      name: RouteNamesEnum.creatorVideo,
-      component: () => import("@/views/CreatorVideo.vue")
-    },
-    {
       path: "/videos/:id",
       name: RouteNamesEnum.userVideo,
       component: () => import("@/views/UserVideo.vue")

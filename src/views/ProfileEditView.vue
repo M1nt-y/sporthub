@@ -194,6 +194,8 @@ import TheButton from '@/components/UI/Buttons/TheButton.vue'
 import TheInput from '@/components/UI/Inputs/TheInput.vue'
 import UploadIcon from '@/assets/icons/Upload/UploadIcon.vue'
 import CoverIcon from '@/assets/icons/Upload/CoverIcon.vue'
+import type {UserType} from "@/types/types";
+import {User} from "@/types/types";
 
 
 const db = getFirestore()
@@ -201,19 +203,7 @@ const storage = getStorage()
 const authStore = useAuthStore()
 const {user} = storeToRefs(authStore)
 
-const formData = ref({
-  firstName: '',
-  lastName: '',
-  gender: '',
-  birthdate: '',
-  address: '',
-  llc: '',
-  description: '',
-  vimeo: '',
-  instagram: '',
-  facebook: '',
-  twitter: ''
-})
+const formData: Ref<UserType> = ref(new User())
 
 const photoInput = ref<HTMLInputElement | null>(null)
 const coverInput = ref<HTMLInputElement | null>(null)
@@ -257,9 +247,9 @@ function handleCoverChange(event: Event) {
 }
 
 onMounted(() => {
-  formData.value = user.value
-  photoPreview.value = user.value.photo.link
-  coverPreview.value = user.value.cover.link
+  formData.value = user.value as UserType
+  photoPreview.value = user.value!.photo.link
+  coverPreview.value = user.value!.cover.link
 })
 
 async function saveProfile() {
@@ -267,10 +257,10 @@ async function saveProfile() {
 
   if (photo.value !== null) {
     let photoName = ''
-    if (!user.value.photo.id) {
+    if (!user.value!.photo.id) {
       photoName = 'pfp-' + date
     } else {
-      photoName = user.value.photo.id
+      photoName = user.value!.photo.id
     }
     const pfpRef = storageRef(storage, 'profile-pictures/' + photoName);
     await uploadBytes(pfpRef, photo.value).then(async () => {
@@ -287,10 +277,10 @@ async function saveProfile() {
 
   if (cover.value !== null) {
     let coverName = ''
-    if (!user.value.cover.id) {
+    if (!user.value!.cover.id) {
       coverName = 'pfp-' + date
     } else {
-      coverName = user.value.cover.id
+      coverName = user.value!.cover.id
     }
     const coverRef = storageRef(storage, 'covers/' + coverName);
     await uploadBytes(coverRef, cover.value).then(async () => {

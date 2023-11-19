@@ -63,7 +63,7 @@ async function handleLogin() {
           user.value = doc.data() as UserType
         })
         localStorage.setItem('isAuthorised', 'true')
-        if (user.value.isBusiness) {
+        if (user.value!.isBusiness) {
           localStorage.setItem('isCreator', 'true')
         }
         await router.push('/')
